@@ -4,7 +4,7 @@
 
 This repository contains the material for the SAP TechEd 2026 session RA161 — Hands on SAP Domain Models across design, build, and run time.
 
-SAP Domain Models are specialized language models trained on SAP system knowledge — the S/4HANA ABAP codebase and data dictionary, and the Ariba API specifications and application code — combined with knowledge-graph retrieval over those sources. They answer with verifiable system facts (tables and key fields, function modules with packages, released APIs, endpoint paths) where general-purpose models must hedge or point you at documentation.
+SAP Domain Models are specialized language models trained on SAP system knowledge — the S/4HANA ABAP codebase and data dictionary, and the Ariba API specifications and application code — combined with retrieval over an ontology layer built from those sources. They answer with verifiable system facts (tables and key fields, function modules with packages, released APIs, endpoint paths) where general-purpose models must hedge or point you at documentation.
 
 ## Overview
 

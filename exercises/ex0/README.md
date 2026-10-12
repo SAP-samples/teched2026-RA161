@@ -8,11 +8,11 @@ The SAP Domain Models MCP server exposes three tools inside Claude Code:
 
 | Tool | Grounded in | Ask it about |
 |---|---|---|
-| `s4` | S/4HANA ABAP codebase and data dictionary knowledge graph | Tables, fields, function modules, BAdIs, CDS views, transactions |
-| `ariba` | Ariba API specifications and application code knowledge graph | API endpoints, request/response schemas, pagination, integration patterns |
+| `s4` | Ontology layer over the S/4HANA ABAP codebase and data dictionary | Tables, fields, function modules, BAdIs, CDS views, transactions |
+| `ariba` | Ontology layer over the Ariba API specifications and application code | API endpoints, request/response schemas, pagination, integration patterns |
 | `cap` | SAP Cloud Application Programming Model | CDS models, services, annotations, project setup |
 
-Each tool takes a natural-language question. Behind it, a reasoning model retrieves evidence from the knowledge graph and the domain model, then answers grounded in that evidence.
+Each tool takes a natural-language question. Behind it, a reasoning model retrieves evidence from the ontology layer and the domain model, then answers grounded in that evidence.
 
 ## Step 1 — Get your workshop bundle
 
@@ -85,7 +85,7 @@ Throughout the workshop you will judge answers with three questions. Keep this t
 | e.g. "T030 key fields are KTOPL, KTOSL, BKLAS, BWMOD, KOMOK" | `s4` tool | Yes — data dictionary fact |
 | e.g. "VST is a sales-related transaction key" | `s4` tool | No — semantic gloss, verify before trusting |
 
-The rule of thumb you will test repeatedly: **structure is reliable, glosses are leads.** Object names, key fields, packages, endpoint paths, and pagination mechanics come from the knowledge graph and hold up. One-line explanations of what something means, and exact credential strings like OAuth scopes, vary — treat them as pointers to confirm in the authoritative source.
+The rule of thumb you will test repeatedly: **structure is reliable, glosses are leads.** Object names, key fields, packages, endpoint paths, and pagination mechanics come from the ontology layer and hold up. One-line explanations of what something means, and exact credential strings like OAuth scopes, vary — treat them as pointers to confirm in the authoritative source.
 
 ## Summary
 
