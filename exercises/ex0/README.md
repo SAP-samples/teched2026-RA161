@@ -14,23 +14,46 @@ The SAP Domain Models MCP server exposes three tools inside Claude Code:
 
 Each tool takes a natural-language question. Behind it, a reasoning model retrieves evidence from the knowledge graph and the domain model, then answers grounded in that evidence.
 
-## Step 1 — Get your credentials
+## Step 1 — Get your workshop bundle
 
-> **TBD:** Credential handout is finalized closer to the session. Your facilitator provides a credentials file and the MCP server entry for the facilitator's environment. Follow the handout; the server name in your configuration comes from it.
+> **TBD:** The handout format is finalized closer to the session. Your facilitator provides:
+>
+> | Item | What it is |
+> |---|---|
+> | Setup bundle | A folder containing the SAP Domain Models MCP client — including a **guided installation skill** and the token helper. `<BUNDLE_PATH>` below is wherever you saved it |
+> | Two service binding files | Credential files for the workshop environment (keep them private — their contents never get pasted into chat) |
 
-## Step 2 — Verify the connection
+The server uses application credentials — there is no browser login. A token helper mints a short-lived token each time Claude Code connects; you never handle tokens yourself. Prerequisite: Node.js 20.20.0 or newer (`node --version`).
 
-1. In a terminal, check that the server is configured and connected:
+## Step 2 — Run the guided setup
+
+The bundle ships an installation skill that does the entire setup for you: it checks your Node.js version, walks you through a **private credentials wizard** (you run one command in your own terminal with the paths to your two binding files — no secret ever enters the chat), configures Claude Code, and validates the connection end to end.
+
+Start Claude Code and ask:
+
+```
+Use the install-sap-domain-models-mcp skill from <BUNDLE_PATH> to configure
+this editor for the SAP Domain Models MCP server. Do not ask me to paste secrets.
+```
+
+Follow its instructions. Two expectations while it runs:
+
+- It will ask you to run a short command **in your own terminal** and report back four non-secret lines (environment, endpoint, server name, credentials path). That privacy split is by design.
+- If a browser window or an "Authenticate" prompt ever appears, close it and tell the skill — that is the wrong (interactive) login flow; this server authenticates only through the configured helper.
+
+## Step 3 — Verify the connection
+
+1. When the skill finishes, confirm in a terminal:
 
 ```
 claude mcp list
 ```
 
-You should see the SAP Domain Models server with a ✔ Connected status. If it shows a failure, ask a facilitator before continuing — the fix is usually a stale session (exit Claude Code fully and start it again) rather than a configuration change.
+You should see the server name the skill reported, with a ✔ Connected status. If it shows a failure, ask a facilitator before continuing — the fix is usually a stale session (exit Claude Code fully and start it again) rather than a configuration change.
 
-2. Start a fresh Claude Code session in this repository's directory.
+2. **Exit Claude Code completely and start a fresh session** in this repository's directory. A fresh start is required for the new server to load reliably — re-opening the `/mcp` panel in a running session is not enough.
 
-## Step 3 — Make a real grounded call
+## Step 4 — Make a real grounded call
 
 A connection listing is not proof; a real tool call is. In Claude Code, ask:
 
@@ -52,7 +75,7 @@ A transcript of both probe calls from a working session is in [reference/probe-t
 
 > **If your connection cannot be fixed in a few minutes:** pair with a neighbor and continue the exercises together, and flag a facilitator so they can work on your setup in the background. Do not spend the hour debugging alone.
 
-## Step 4 — Set up your evaluation worksheet
+## Step 5 — Set up your evaluation worksheet
 
 Throughout the workshop you will judge answers with three questions. Keep this table in a scratch file (or on paper):
 
