@@ -1,6 +1,6 @@
 # Exercise 3 - Exploration Tracks
 
-The second hour is yours. Pick a track below — or invent your own. Each track is a starting point, not a script: the goal is to practice the explore → plan → execute pattern from hour 1 on material you care about. Facilitators are around for questions, and your evaluation worksheet from Getting Started still applies: **structure is reliable, glosses are leads.**
+The rest of the session is yours. Pick a track below — or invent your own. Each track is a starting point, not a script: the goal is to practice the explore → plan → execute pattern from the guided exercises on material you care about. Facilitators are around for questions, and your evaluation worksheet from Getting Started still applies: **structure is reliable, glosses are leads.**
 
 ## Track A — Build: an Ariba integration, end to end
 

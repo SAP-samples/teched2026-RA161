@@ -14,7 +14,7 @@ In this session you connect Claude Code to the SAP Domain Models MCP server and 
 - **Build time** — turn grounded facts into an implementation plan and generated code: every object in your plan carries a package, release state, or verifiable identifier.
 - **Run time** — investigate how processes behave in a live system: status fields, integration handoffs, and the objects an agent would monitor.
 
-The first hour is guided (Getting Started plus two exercises). The second hour is yours: a structured menu of exploration tracks, or bring your own scenario.
+The session starts guided (Getting Started plus two exercises); the rest is yours: a structured menu of exploration tracks, or bring your own scenario.
 
 A working principle you will use all session: domain-model answers are strongest on **structure** — object names, key fields, packages, endpoint paths — and those are exactly the facts you can verify. Treat one-line semantic glosses and exact credential strings as leads to confirm, not facts to copy.
 
@@ -27,7 +27,7 @@ A working principle you will use all session: domain-model answers are strongest
 
 ## Exercises
 
-**Hour 1 — guided**
+**Guided exercises**
 
 - [Getting Started](exercises/ex0/) — connect Claude Code to the SAP Domain Models MCP server and verify it with a real call
 - [Exercise 1 - Explore: GL Account Determination](exercises/ex1/)
@@ -38,7 +38,7 @@ A working principle you will use all session: domain-model answers are strongest
     - [Exercise 2.1 - Draft the plan with grounded facts](exercises/ex2#exercise-21-draft-the-plan-with-grounded-facts)
     - [Exercise 2.2 - Score the plan with the rubric](exercises/ex2#exercise-22-score-the-plan-with-the-rubric)
 
-**Hour 2 — free exploration**
+**Free exploration**
 
 - [Exercise 3 - Exploration Tracks](exercises/ex3/) — choose a track: Ariba integration plan-and-build, design-time deep dives, run-time process intelligence, or your own scenario
 
