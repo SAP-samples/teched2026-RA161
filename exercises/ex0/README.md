@@ -32,9 +32,10 @@ The bundle ships an installation skill that does the entire setup for you: it ch
 Start Claude Code and ask:
 
 ```
-Use the install-sap-domain-models-mcp skill from <BUNDLE_PATH> to configure
-this editor for the SAP Domain Models MCP server. Do not ask me to paste secrets.
+Use $install-sap-domain-models-mcp to configure this editor for the SAP Domain Models MCP server. Do not ask me to paste secrets.
 ```
+
+If Claude Code does not find the skill by name, point it at the skill directory inside your bundle (`<BUNDLE_PATH>`) and ask again.
 
 Follow its instructions. Two expectations while it runs:
 
