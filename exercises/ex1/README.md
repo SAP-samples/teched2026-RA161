@@ -29,7 +29,7 @@ GBB). What CDS views expose this determination data? What function module
 can a partner call to programmatically resolve a GL account in custom coding?
 ```
 
-This call takes a moment — the backend is traversing the knowledge graph. While it runs, predict: which of the hedged claims from 1.1 do you expect to become concrete?
+This call takes a moment — the backend is traversing the ontology layer. While it runs, predict: which of the hedged claims from 1.1 do you expect to become concrete?
 
 ## Exercise 1.3 Verify the structure
 
@@ -41,7 +41,7 @@ Score the grounded answer against this checklist. Everything in the first group 
 | A function module for programmatic resolution, with its package | The supported path for custom code, instead of SELECTing T030 directly |
 | A second FM for invoice verification, with its package | Account determination has more than one entry point |
 | Named CDS views over T030 / T030K / T030U | The modern query surface for this configuration |
-| Foreign-key relationships (SKA1, T004, T005, T007A) | The graph structure around the table family |
+| Foreign-key relationships (SKA1, T004, T005, T007A) | The relational structure around the table family |
 
 Second group — **glosses, not facts**. If the answer explains what individual KTOSL keys *mean* (e.g. what VST or PRD stands for) or which of KONTS/KONTH is debit vs credit, log those claims in your worksheet as *leads to verify*: one-line semantic explanations are where grounded models are weakest, even when every object name around them is exact.
 
