@@ -74,7 +74,7 @@ Notice the answer's style: it names a specific API and operation, and if the evi
 
 A transcript of both probe calls from a working session is in [reference/probe-transcript.md](reference/probe-transcript.md) — your wording will differ; the shape should match.
 
-> **If your connection cannot be fixed in a few minutes:** pair with a neighbor and continue the exercises together, and flag a facilitator so they can work on your setup in the background. Do not spend the hour debugging alone.
+> **If your connection cannot be fixed in a few minutes:** pair with a neighbor and continue the exercises together, and flag a facilitator so they can work on your setup in the background. Do not spend the session debugging alone.
 
 ## Step 5 — Set up your evaluation worksheet
 
