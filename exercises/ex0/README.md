@@ -14,20 +14,22 @@ The SAP Domain Models MCP server exposes three tools inside Claude Code:
 
 Each tool takes a natural-language question. Behind it, a reasoning model retrieves evidence from the ontology layer and the domain model, then answers grounded in that evidence.
 
-## Step 1 — Get your workshop bundle
+## Step 1 — Get the setup bundle and credentials
 
-> **TBD:** The handout format is finalized closer to the session. Your facilitator provides:
->
-> | Item | What it is |
-> |---|---|
-> | Setup bundle | A folder containing the SAP Domain Models MCP client — including a **guided installation skill** and the token helper. `<BUNDLE_PATH>` below is wherever you saved it |
-> | Two service binding files | Credential files for the workshop environment (keep them private — their contents never get pasted into chat) |
+> **TBD:** The setup bundle distribution is finalized closer to the session. It is a folder containing the SAP Domain Models MCP client — including a **guided installation skill** and the token helper. `<BUNDLE_PATH>` below is wherever you saved it.
 
-The server uses application credentials — there is no browser login. A token helper mints a short-lived token each time Claude Code connects; you never handle tokens yourself. Prerequisite: Node.js 20.20.0 or newer (`node --version`).
+Your credentials are two service binding files **in this repository** (added shortly before the session — the paths below are placeholders until then):
+
+| File | What it is |
+|---|---|
+| `credentials/sap-domain-models-binding.json` | Service binding that identifies the workshop environment |
+| `credentials/ias-binding.json` | IAS binding the token helper uses to mint short-lived access tokens |
+
+These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the file contents into chat.
 
 ## Step 2 — Run the guided setup
 
-The bundle ships an installation skill that does the entire setup for you: it checks your Node.js version, walks you through a **private credentials wizard** (you run one command in your own terminal with the paths to your two binding files — no secret ever enters the chat), configures Claude Code, and validates the connection end to end.
+The bundle ships an installation skill that does the entire setup for you: it checks your Node.js version, walks you through a private credentials wizard, configures Claude Code, and validates the connection end to end.
 
 Start Claude Code and ask:
 
@@ -37,10 +39,39 @@ Use $install-sap-domain-models-mcp to configure this editor for the SAP Domain M
 
 If Claude Code does not find the skill by name, point it at the skill directory inside your bundle (`<BUNDLE_PATH>`) and ask again.
 
-Follow its instructions. Two expectations while it runs:
+### What the skill will ask you
 
-- It will ask you to run a short command **in your own terminal** and report back four non-secret lines (environment, endpoint, server name, credentials path). That privacy split is by design.
-- If a browser window or an "Authenticate" prompt ever appears, close it and tell the skill — that is the wrong (interactive) login flow; this server authenticates only through the configured helper.
+So you know what's coming, the run has four interaction points:
+
+1. **Permission prompts** for a few read-only checks (Node.js version, locating the helper). Approve them.
+
+2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design:
+
+```
+bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
+```
+
+3. **Two file-path prompts** from the wizard. Answer with this repository's credential files (absolute paths, or `~`-prefixed on macOS/Linux):
+
+```
+SAP Domain Models service binding JSON file: <path-to-this-repo>/credentials/sap-domain-models-binding.json
+IAS service binding JSON file: <path-to-this-repo>/credentials/ias-binding.json
+```
+
+The wizard validates both files, detects the workshop environment from the service binding, and writes a protected credentials file. It prints exactly four non-secret result lines, shaped like:
+
+```
+Detected environment: <ENVIRONMENT>
+MCP endpoint: <MCP_ENDPOINT>
+MCP server name: <SERVER_NAME>
+Wrote /Users/<you>/.config/sap-domain-models/mcp-<environment>-credentials.env
+```
+
+If the wizard instead reports `Credentials file already exists`, you (or a previous attempt) already wrote one — re-run it with `--force` to replace it, and the last line reads `Replaced` instead of `Wrote`.
+
+4. **Paste those four lines back into Claude Code.** The skill uses them to write the MCP server entry and then validates the connection with a real tool call.
+
+One caution for the whole run: if a browser window or an "Authenticate" prompt ever appears, close it and tell the skill — that is the wrong (interactive) login flow; this server authenticates only through the configured helper.
 
 ## Step 3 — Verify the connection
 
