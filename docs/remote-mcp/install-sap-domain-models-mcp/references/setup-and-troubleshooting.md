@@ -91,10 +91,11 @@ NODE_BIN_DIR="$(dirname "$NODE_BIN")"
 SERVER_PATH="$NODE_BIN_DIR:/usr/local/bin:/usr/bin:/bin"
 ```
 
-On Windows, the agent's shell is Git Bash, not PowerShell, so a PowerShell
-block pasted directly fails with `command not found`. Run every PowerShell
-block in this skill through `powershell -NoProfile -Command "..."`, or save it
-to a file and run
+On Windows, the agent's command shell may be a POSIX shell rather than
+PowerShell (Claude Code runs commands through Git Bash), where a bare
+PowerShell block fails with `command not found`. Unless the shell is known to
+be PowerShell, run every PowerShell block in this skill through
+`powershell -NoProfile -Command "..."`, or save it to a file and run
 `powershell -NoProfile -ExecutionPolicy Bypass -File <path>`.
 
 On Windows PowerShell, prefer the active executable when it is compatible. If
