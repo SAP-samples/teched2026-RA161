@@ -204,29 +204,32 @@ cp "<this-skill-dir>/assets/set-credentials.sh" \
 chmod 700 "$HOME/.config/sap-domain-models/sap-domain-models-set-credentials.sh"
 ```
 
-Ask the user to run this in their own interactive terminal:
+Run the wizard yourself, non-interactively, passing the repository's two
+binding files as arguments (absolute paths):
 
 ```sh
-bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
+bash "$HOME/.config/sap-domain-models/sap-domain-models-set-credentials.sh" \
+  "<repo>/credentials/sap-domain-models-prod-usea.json" \
+  "<repo>/credentials/ias-prod-usea.json"
 ```
 
-The wizard asks for the locations of `sap-domain-models-prod-usea.json` and
-`ias-prod-usea.json`, offering the workshop repository's `credentials/` copies as
-defaults when run from the repository root; pressing Enter accepts the default
-and a typed path overrides it. It validates both files,
-detects the cluster from the SAP Domain Models `url`, extracts the IAS values
-without displaying them, and atomically writes a mode-600 credentials file. It
-prints exactly four non-secret results: detected environment, MCP endpoint, MCP
-server name, and the written credentials path. Pause until the user shares all
-four lines and confirms it printed `Wrote ...`. Never read or display either
-binding or the resulting credentials file. The user may also pass both quoted
-file paths as arguments. If the wizard reports that the destination exists,
-obtain explicit user approval before rerunning it with `--force`. Use
+The wizard validates both files, detects the cluster from the SAP Domain
+Models `url`, extracts the IAS values without displaying them, and atomically
+writes a mode-600 credentials file. Its entire output is four non-secret
+results: detected environment, MCP endpoint, MCP server name, and the written
+credentials path — use those four lines directly. Never read or display either
+binding or the resulting credentials file, and never run the wizard in its
+interactive prompt mode from the agent. If the repository binding files are
+missing (`ias-prod-usea.json` means the decrypt step has not run; see above),
+or the user keeps their bindings elsewhere, ask the user to run the same
+command in their own terminal with their paths and to share the four result
+lines. If the wizard reports that the destination exists, obtain explicit user
+approval before rerunning it with `--force`. Use
 `assets/credentials.env.example` only when the user declines the wizard or it
 cannot run.
 
-On Windows, install the bundled PowerShell wizard and ask the user to run it in
-their own terminal:
+On Windows, install the bundled PowerShell wizard and run it the same way,
+with both binding paths as parameters:
 
 ```powershell
 $dir = Join-Path $HOME ".config\sap-domain-models"
@@ -235,7 +238,9 @@ Copy-Item "<this-skill-dir>\assets\set-credentials.ps1" `
   (Join-Path $dir "sap-domain-models-set-credentials.ps1")
 $wizard = Join-Path $dir "sap-domain-models-set-credentials.ps1"
 Unblock-File -LiteralPath $wizard
-powershell -NoProfile -ExecutionPolicy Bypass -File $wizard
+powershell -NoProfile -ExecutionPolicy Bypass -File $wizard `
+  -SapDomainModelsBinding "<repo>\credentials\sap-domain-models-prod-usea.json" `
+  -IasBinding "<repo>\credentials\ias-prod-usea.json"
 ```
 
 The Windows wizard creates owner-only ACLs on its directory and credentials

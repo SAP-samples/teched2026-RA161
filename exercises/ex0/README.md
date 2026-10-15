@@ -68,32 +68,11 @@ Start Claude Code **in this repository's directory** and ask:
 Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Domain Models MCP in this editor. Do not ask me to paste secrets.
 ```
 
-### What the skill will ask you
+### What the skill will do
 
-So you know what's coming, the run has four interaction points:
+The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. Your part:
 
-1. **Permission prompts** for a few read-only checks (Node.js version, locating the helper). Approve them.
-
-2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design. Run it from this repository's root directory so the defaults in the next step resolve. On macOS/Linux:
-
-```
-bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
-```
-
-On Windows (PowerShell; the skill gives you the exact command):
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$HOME\.config\sap-domain-models\sap-domain-models-set-credentials.ps1"
-```
-
-3. **Two file-path prompts** from the wizard, each showing this repository's `credentials/` copy as a default in brackets (the defaults resolve when you run the wizard from the repository root). **Press Enter to accept the default**; type a path only if your files are somewhere else:
-
-```
-Location of sap-domain-models-prod-usea.json [<repo>/credentials/sap-domain-models-prod-usea.json]:
-Location of ias-prod-usea.json [<repo>/credentials/ias-prod-usea.json]:
-```
-
-The wizard validates both files, detects the workshop environment from the service binding, and writes a protected credentials file. It prints exactly four non-secret result lines:
+1. **Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines:
 
 ```
 Detected environment: Prod USEA
@@ -102,11 +81,11 @@ MCP server name: prod_usea_sap_domain_models_mcp
 Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env
 ```
 
-If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair. Decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), re-run the wizard answering the prompts with `credentials/sap-domain-models-prod-dewc.json` and `credentials/ias-prod-dewc.json` instead of the defaults, and paste the new four result lines — they say `Prod DEWC` — into Claude Code so it adds the fallback server.
+2. **Confirm `--force` if asked.** If the wizard reports `Credentials file already exists`, a previous attempt already wrote one — the skill asks your approval to re-run with `--force`, and the last line then reads `Replaced` instead of `Wrote`.
 
-If the wizard instead reports `Credentials file already exists`, you (or a previous attempt) already wrote one — re-run it with `--force` to replace it, and the last line reads `Replaced` instead of `Wrote`.
+The skill finishes by writing the MCP server entry and validating the connection with a real tool call.
 
-4. **Paste those four lines back into Claude Code.** The skill uses them to write the MCP server entry and then validates the connection with a real tool call.
+If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair: decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), then ask the skill to re-run the setup with `credentials/sap-domain-models-prod-dewc.json` and `credentials/ias-prod-dewc.json` — the result lines say `Prod DEWC`, and the fallback server is added beside the first one.
 
 One caution for the whole run: if a browser window or an "Authenticate" prompt ever appears, close it and tell the skill — that is the wrong (interactive) login flow; this server authenticates only through the configured helper.
 
