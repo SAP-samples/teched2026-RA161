@@ -71,7 +71,7 @@ MCP server name: prod_usea_sap_domain_models_mcp
 Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env
 ```
 
-If the facilitators announce a fallback during the session, you'll receive Prod DEWC binding files instead — the flow is identical and the result lines say `Prod DEWC`.
+If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair. Decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), re-run the wizard answering the prompts with `credentials/sap-domain-models-dewc.json` and `credentials/ias-dewc.json` instead of the defaults, and paste the new four result lines — they say `Prod DEWC` — into Claude Code so it adds the fallback server.
 
 If the wizard instead reports `Credentials file already exists`, you (or a previous attempt) already wrote one — re-run it with `--force` to replace it, and the last line reads `Replaced` instead of `Wrote`.
 

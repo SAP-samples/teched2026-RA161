@@ -3,13 +3,16 @@
 // credentials/ias-dev.json.enc into credentials/ias-dev.json.
 //
 // Usage:
-//   node scripts/decrypt-credentials.cjs
+//   node scripts/decrypt-credentials.cjs [--fallback]
 //     Prompts for the passphrase announced at the session and writes
 //     credentials/ias-dev.json (mode 600). Never prints binding values.
+//     --fallback works on the Prod DEWC pair instead:
+//     credentials/ias-dewc.json.enc -> credentials/ias-dewc.json.
 //
-//   node scripts/decrypt-credentials.cjs --encrypt <ias-binding.json>
+//   node scripts/decrypt-credentials.cjs --encrypt [--fallback] <ias-binding.json>
 //     Facilitators: encrypts a downloaded IAS binding to
-//     credentials/ias-dev.json.enc. Prompts for the passphrase twice.
+//     credentials/ias-dev.json.enc (or ias-dewc.json.enc with --fallback).
+//     Prompts for the passphrase twice.
 //
 // Format: AES-256-GCM, key derived with scrypt. The .enc file layout is
 // magic(8) | salt(16) | iv(12) | auth tag(16) | ciphertext.
@@ -22,8 +25,8 @@ const path = require('node:path');
 
 const MAGIC = Buffer.from('RA161ENC', 'ascii');
 const REPO_ROOT = path.resolve(__dirname, '..');
-const ENC_FILE = path.join(REPO_ROOT, 'credentials', 'ias-dev.json.enc');
-const PLAIN_FILE = path.join(REPO_ROOT, 'credentials', 'ias-dev.json');
+let encFile = path.join(REPO_ROOT, 'credentials', 'ias-dev.json.enc');
+let plainFile = path.join(REPO_ROOT, 'credentials', 'ias-dev.json');
 
 let pipedInput = null;
 function nextPipedLine() {
@@ -91,18 +94,18 @@ async function encrypt(inputPath) {
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv('aes-256-gcm', deriveKey(passphrase, salt), iv);
   const ciphertext = Buffer.concat([cipher.update(plaintext), cipher.final()]);
-  fs.mkdirSync(path.dirname(ENC_FILE), { recursive: true });
-  fs.writeFileSync(ENC_FILE, Buffer.concat([MAGIC, salt, iv, cipher.getAuthTag(), ciphertext]));
-  console.log(`Wrote ${path.relative(process.cwd(), ENC_FILE)}`);
+  fs.mkdirSync(path.dirname(encFile), { recursive: true });
+  fs.writeFileSync(encFile, Buffer.concat([MAGIC, salt, iv, cipher.getAuthTag(), ciphertext]));
+  console.log(`Wrote ${path.relative(process.cwd(), encFile)}`);
 }
 
 async function decrypt() {
-  if (!fs.existsSync(ENC_FILE)) {
+  if (!fs.existsSync(encFile)) {
     throw new Error(
-      `Missing ${path.relative(process.cwd(), ENC_FILE)} — it is added shortly before the session; run git pull.`,
+      `Missing ${path.relative(process.cwd(), encFile)} — it is added shortly before the session; run git pull.`,
     );
   }
-  const blob = fs.readFileSync(ENC_FILE);
+  const blob = fs.readFileSync(encFile);
   if (blob.length < 52 || !blob.subarray(0, 8).equals(MAGIC)) {
     throw new Error('The encrypted file is not in the expected format.');
   }
@@ -119,21 +122,25 @@ async function decrypt() {
   } catch {
     throw new Error('Decryption failed — wrong passphrase, or the file is corrupted.');
   }
-  fs.writeFileSync(PLAIN_FILE, plaintext, { mode: 0o600 });
-  console.log(`Wrote ${path.relative(process.cwd(), PLAIN_FILE)}`);
+  fs.writeFileSync(plainFile, plaintext, { mode: 0o600 });
+  console.log(`Wrote ${path.relative(process.cwd(), plainFile)}`);
 }
 
 async function main() {
   const args = process.argv.slice(2);
-  if (args[0] === '--encrypt') {
-    if (args.length !== 2) {
-      throw new Error('Usage: node scripts/decrypt-credentials.cjs --encrypt <ias-binding.json>');
-    }
-    await encrypt(args[1]);
-  } else if (args.length === 0) {
+  const usage = 'Usage: node scripts/decrypt-credentials.cjs [--encrypt <ias-binding.json>] [--fallback]';
+  if (args.includes('--fallback')) {
+    encFile = path.join(REPO_ROOT, 'credentials', 'ias-dewc.json.enc');
+    plainFile = path.join(REPO_ROOT, 'credentials', 'ias-dewc.json');
+  }
+  const rest = args.filter((arg) => arg !== '--fallback');
+  if (rest[0] === '--encrypt') {
+    if (rest.length !== 2) throw new Error(usage);
+    await encrypt(rest[1]);
+  } else if (rest.length === 0) {
     await decrypt();
   } else {
-    throw new Error('Usage: node scripts/decrypt-credentials.cjs [--encrypt <ias-binding.json>]');
+    throw new Error(usage);
   }
 }
 

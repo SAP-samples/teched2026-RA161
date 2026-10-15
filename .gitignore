@@ -1,2 +1,3 @@
-# Decrypted workshop IAS binding — produced locally by scripts/decrypt-credentials.cjs
+# Decrypted workshop IAS bindings — produced locally by scripts/decrypt-credentials.cjs
 credentials/ias-dev.json
+credentials/ias-dewc.json
