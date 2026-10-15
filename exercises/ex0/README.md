@@ -18,26 +18,27 @@ Each tool takes a natural-language question. Behind it, a reasoning model retrie
 
 The workshop machines do not come with this repository, and you don't need a GitHub account or `git` to get it:
 
-1. Download the ZIP: <https://github.com/SAP-samples/teched2026-RA161/archive/refs/heads/main.zip> (or **Code → Download ZIP** on the repository page — no sign-in required).
-2. Extract it into a `projects` directory under your home directory (create it if it doesn't exist). Don't move or delete the extracted folder after setup: the editor configuration you are about to create points at it by absolute path.
+**1. Download the ZIP:** <https://github.com/SAP-samples/teched2026-RA161/archive/refs/heads/main.zip> (or **Code → Download ZIP** on the repository page — no sign-in required).
 
-   Windows (PowerShell):
+**2. Extract it into a `projects` directory under your home directory** (created if it doesn't exist). Don't move or delete the extracted folder after setup: the editor configuration you are about to create points at it by absolute path.
 
-   ```powershell
-   New-Item -ItemType Directory -Force -Path "$HOME\projects" | Out-Null
-   Expand-Archive -LiteralPath "$HOME\Downloads\teched2026-RA161-main.zip" -DestinationPath "$HOME\projects"
-   cd "$HOME\projects\teched2026-RA161-main"
-   ```
+Windows (PowerShell):
 
-   macOS/Linux:
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME\projects" | Out-Null
+Expand-Archive -LiteralPath "$HOME\Downloads\teched2026-RA161-main.zip" -DestinationPath "$HOME\projects"
+cd "$HOME\projects\teched2026-RA161-main"
+```
 
-   ```sh
-   mkdir -p ~/projects
-   unzip ~/Downloads/teched2026-RA161-main.zip -d ~/projects
-   cd ~/projects/teched2026-RA161-main
-   ```
+macOS/Linux:
 
-3. Stay in that terminal — you are now in the extracted folder (`~/projects/teched2026-RA161-main`), and every command in this exercise runs from there.
+```sh
+mkdir -p ~/projects
+unzip ~/Downloads/teched2026-RA161-main.zip -d ~/projects
+cd ~/projects/teched2026-RA161-main
+```
+
+**3. Stay in that terminal** — you are now in the extracted folder (`~/projects/teched2026-RA161-main`), and every command in this exercise runs from there.
 
 ## Step 2 — Locate your credentials
 
@@ -72,7 +73,7 @@ Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Doma
 
 The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. Your part:
 
-1. **Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines:
+**1. Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines:
 
 ```
 Detected environment: Prod USEA
@@ -83,7 +84,7 @@ Wrote C:\Users\<you>\.config\sap-domain-models\mcp-prod-usea-credentials.env
 
 (On macOS/Linux the last line reads `Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env`.)
 
-2. **Confirm `--force` if asked.** If the wizard reports `Credentials file already exists`, a previous attempt already wrote one — the skill asks your approval to re-run with `--force`, and the last line then reads `Replaced` instead of `Wrote`.
+**2. Confirm `--force` if asked.** If the wizard reports `Credentials file already exists`, a previous attempt already wrote one — the skill asks your approval to re-run with `--force`, and the last line then reads `Replaced` instead of `Wrote`.
 
 The skill finishes by writing the MCP server entry and validating the connection with a real tool call.
 
@@ -93,7 +94,7 @@ One caution for the whole run: if a browser window or an "Authenticate" prompt e
 
 ## Step 4 — Verify the connection
 
-1. When the skill finishes, confirm in a terminal:
+**1. When the skill finishes, confirm in a terminal:**
 
 ```
 claude mcp list
@@ -101,7 +102,7 @@ claude mcp list
 
 You should see the server name the skill reported, with a ✔ Connected status. If it shows a failure, ask a facilitator before continuing — the fix is usually a stale session (exit Claude Code fully and start it again) rather than a configuration change.
 
-2. **Exit Claude Code completely and start a fresh session** in this repository's directory. A fresh start is required for the new server to load reliably — re-opening the `/mcp` panel in a running session is not enough.
+**2. Exit Claude Code completely and start a fresh session** in this repository's directory. A fresh start is required for the new server to load reliably — re-opening the `/mcp` panel in a running session is not enough.
 
 ## Step 5 — Make a real grounded call
 
