@@ -18,9 +18,27 @@ Each tool takes a natural-language question. Behind it, a reasoning model retrie
 
 The workshop machines do not come with this repository, and you don't need a GitHub account or `git` to get it:
 
-1. Download the ZIP: <https://github.com/SAP-samples/teched2026-RA161/archive/refs/heads/main.zip> (or **Code → Download ZIP** on the repository page — no sign-in required).
-2. Extract it to a durable location such as your home folder or Desktop — not a temporary folder, and don't move or delete it after setup: the editor configuration you are about to create points at this folder by absolute path.
-3. Open a terminal in the extracted folder (`teched2026-RA161-main`). Every command in this exercise runs from there.
+**1. Download the ZIP:** <https://github.com/SAP-samples/teched2026-RA161/archive/refs/heads/main.zip> (or **Code → Download ZIP** on the repository page — no sign-in required).
+
+**2. Extract it into a `projects` directory under your home directory** (created if it doesn't exist). Don't move or delete the extracted folder after setup: the editor configuration you are about to create points at it by absolute path.
+
+Windows (PowerShell):
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$HOME\projects" | Out-Null
+Expand-Archive -LiteralPath "$HOME\Downloads\teched2026-RA161-main.zip" -DestinationPath "$HOME\projects"
+cd "$HOME\projects\teched2026-RA161-main"
+```
+
+macOS/Linux:
+
+```sh
+mkdir -p ~/projects
+unzip ~/Downloads/teched2026-RA161-main.zip -d ~/projects
+cd ~/projects/teched2026-RA161-main
+```
+
+**3. Stay in that terminal** — you are now in the extracted folder (`~/projects/teched2026-RA161-main`), and every command in this exercise runs from there.
 
 ## Step 2 — Locate your credentials
 
@@ -31,7 +49,7 @@ Your credentials are two service binding files in this repository's `credentials
 | `credentials/sap-domain-models-prod-usea.json` | Service binding that identifies the workshop environment |
 | `credentials/ias-prod-usea.json.enc` | **Encrypted** IAS binding the token helper uses to mint short-lived access tokens — added shortly before the session |
 
-Decrypt the IAS binding with the passphrase shown on screen at the session:
+Decrypt the IAS binding with the passphrase shown on screen at the session — the command is the same in PowerShell and in a macOS/Linux shell, run from the extracted folder:
 
 ```
 node scripts/decrypt-credentials.cjs
@@ -51,45 +69,32 @@ Start Claude Code **in this repository's directory** and ask:
 Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Domain Models MCP in this editor. Do not ask me to paste secrets.
 ```
 
-### What the skill will ask you
+### What the skill will do
 
-So you know what's coming, the run has four interaction points:
+The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. Your part:
 
-1. **Permission prompts** for a few read-only checks (Node.js version, locating the helper). Approve them.
-
-2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design. Run it from this repository's root directory so the defaults in the next step resolve:
-
-```
-bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
-```
-
-3. **Two file-path prompts** from the wizard, each showing this repository's `credentials/` copy as a default in brackets (the defaults resolve when you run the wizard from the repository root). **Press Enter to accept the default**; type a path only if your files are somewhere else:
-
-```
-Location of sap-domain-models-prod-usea.json [<repo>/credentials/sap-domain-models-prod-usea.json]:
-Location of ias-prod-usea.json [<repo>/credentials/ias-prod-usea.json]:
-```
-
-The wizard validates both files, detects the workshop environment from the service binding, and writes a protected credentials file. It prints exactly four non-secret result lines:
+**1. Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines:
 
 ```
 Detected environment: Prod USEA
 MCP endpoint: https://sap-domain-models-mcp-prod-usea.appai.cloud.sap/mcp
 MCP server name: prod_usea_sap_domain_models_mcp
-Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env
+Wrote C:\Users\<you>\.config\sap-domain-models\mcp-prod-usea-credentials.env
 ```
 
-If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair. Decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), re-run the wizard answering the prompts with `credentials/sap-domain-models-prod-dewc.json` and `credentials/ias-prod-dewc.json` instead of the defaults, and paste the new four result lines — they say `Prod DEWC` — into Claude Code so it adds the fallback server.
+(On macOS/Linux the last line reads `Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env`.)
 
-If the wizard instead reports `Credentials file already exists`, you (or a previous attempt) already wrote one — re-run it with `--force` to replace it, and the last line reads `Replaced` instead of `Wrote`.
+**2. Confirm `--force` if asked.** If the wizard reports `Credentials file already exists`, a previous attempt already wrote one — the skill asks your approval to re-run with `--force`, and the last line then reads `Replaced` instead of `Wrote`.
 
-4. **Paste those four lines back into Claude Code.** The skill uses them to write the MCP server entry and then validates the connection with a real tool call.
+The skill finishes by writing the MCP server entry and validating the connection with a real tool call.
+
+If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair: decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), then ask the skill to re-run the setup with `credentials/sap-domain-models-prod-dewc.json` and `credentials/ias-prod-dewc.json` — the result lines say `Prod DEWC`, and the fallback server is added beside the first one.
 
 One caution for the whole run: if a browser window or an "Authenticate" prompt ever appears, close it and tell the skill — that is the wrong (interactive) login flow; this server authenticates only through the configured helper.
 
 ## Step 4 — Verify the connection
 
-1. When the skill finishes, confirm in a terminal:
+**1. When the skill finishes, confirm in a terminal:**
 
 ```
 claude mcp list
@@ -97,7 +102,7 @@ claude mcp list
 
 You should see the server name the skill reported, with a ✔ Connected status. If it shows a failure, ask a facilitator before continuing — the fix is usually a stale session (exit Claude Code fully and start it again) rather than a configuration change.
 
-2. **Exit Claude Code completely and start a fresh session** in this repository's directory. A fresh start is required for the new server to load reliably — re-opening the `/mcp` panel in a running session is not enough.
+**2. Exit Claude Code completely and start a fresh session** in this repository's directory. A fresh start is required for the new server to load reliably — re-opening the `/mcp` panel in a running session is not enough.
 
 ## Step 5 — Make a real grounded call
 
