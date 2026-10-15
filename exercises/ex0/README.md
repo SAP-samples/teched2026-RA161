@@ -21,9 +21,17 @@ Your credentials are two service binding files in this repository's `credentials
 | File | What it is |
 |---|---|
 | `credentials/sap-domain-models-dev.json` | Service binding that identifies the workshop environment |
-| `credentials/ias-dev.json` | IAS binding the token helper uses to mint short-lived access tokens — **added shortly before the session** |
+| `credentials/ias-dev.json.enc` | **Encrypted** IAS binding the token helper uses to mint short-lived access tokens — added shortly before the session |
 
-These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the file contents into chat. If `ias-dev.json` is missing, pull the latest commit (`git pull`).
+Decrypt the IAS binding with the passphrase shown on screen at the session:
+
+```
+node scripts/decrypt-credentials.cjs
+```
+
+It prompts for the passphrase (your input is hidden) and writes `credentials/ias-dev.json`. If it reports that the encrypted file is missing, run `git pull`.
+
+These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the decrypted file's contents into chat.
 
 ## Step 2 — Run the guided setup
 
