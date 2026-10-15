@@ -102,7 +102,7 @@ async function encrypt(inputPath) {
 async function decrypt() {
   if (!fs.existsSync(encFile)) {
     throw new Error(
-      `Missing ${path.relative(process.cwd(), encFile)} — it is added shortly before the session; run git pull.`,
+      `Missing ${path.relative(process.cwd(), encFile)} — it is added shortly before the session; download a fresh copy of the workshop repository.`,
     );
   }
   const blob = fs.readFileSync(encFile);

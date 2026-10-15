@@ -61,12 +61,12 @@ Require the complete repository workflow:
 <repo>/docs/remote-mcp/install-sap-domain-models-mcp/assets/set-credentials.ps1
 ```
 
-If any required file is missing, stop and ask the user to re-clone or select the
-complete onboarding repository.
+If any required file is missing, stop and ask the user to re-clone or
+re-download the complete onboarding repository.
 
 Before saving the helper path in editor configuration, confirm the checkout is
 in a durable location. If it is under a temporary directory, stop and ask the
-user to move or re-clone it to a stable path.
+user to move it (or clone or download it again) to a stable path.
 
 After the shared Node.js resolution procedure, set the absolute helper path:
 

@@ -14,7 +14,15 @@ The SAP Domain Models MCP server exposes three tools inside Claude Code:
 
 Each tool takes a natural-language question. Behind it, a reasoning model retrieves evidence from the ontology layer and the domain model, then answers grounded in that evidence.
 
-## Step 1 — Locate your credentials
+## Step 1 — Download this repository
+
+The workshop machines do not come with this repository, and you don't need a GitHub account or `git` to get it:
+
+1. Download the ZIP: <https://github.com/SAP-samples/teched2026-RA161/archive/refs/heads/main.zip> (or **Code → Download ZIP** on the repository page — no sign-in required).
+2. Extract it to a durable location such as your home folder or Desktop — not a temporary folder, and don't move or delete it after setup: the editor configuration you are about to create points at this folder by absolute path.
+3. Open a terminal in the extracted folder (`teched2026-RA161-main`). Every command in this exercise runs from there.
+
+## Step 2 — Locate your credentials
 
 Your credentials are two service binding files in this repository's `credentials/` directory:
 
@@ -29,11 +37,11 @@ Decrypt the IAS binding with the passphrase shown on screen at the session:
 node scripts/decrypt-credentials.cjs
 ```
 
-It prompts for the passphrase (your input is hidden) and writes `credentials/ias-dev.json`. If it reports that the encrypted file is missing, run `git pull`.
+It prompts for the passphrase (your input is hidden) and writes `credentials/ias-dev.json`. If it reports that the encrypted file is missing, your ZIP predates the credential upload — download a fresh copy of the repository (Step 1) and start again from there.
 
 These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the decrypted file's contents into chat.
 
-## Step 2 — Run the guided setup
+## Step 3 — Run the guided setup
 
 This repository ships an installation skill that does the entire setup for you: it checks your Node.js version, walks you through a private credentials wizard, configures Claude Code, and validates the connection end to end.
 
@@ -79,7 +87,7 @@ If the wizard instead reports `Credentials file already exists`, you (or a previ
 
 One caution for the whole run: if a browser window or an "Authenticate" prompt ever appears, close it and tell the skill — that is the wrong (interactive) login flow; this server authenticates only through the configured helper.
 
-## Step 3 — Verify the connection
+## Step 4 — Verify the connection
 
 1. When the skill finishes, confirm in a terminal:
 
@@ -91,7 +99,7 @@ You should see the server name the skill reported, with a ✔ Connected status. 
 
 2. **Exit Claude Code completely and start a fresh session** in this repository's directory. A fresh start is required for the new server to load reliably — re-opening the `/mcp` panel in a running session is not enough.
 
-## Step 4 — Make a real grounded call
+## Step 5 — Make a real grounded call
 
 A connection listing is not proof; a real tool call is. In Claude Code, ask:
 
@@ -113,7 +121,7 @@ A transcript of both probe calls from a working session is in [reference/probe-t
 
 > **If your connection cannot be fixed in a few minutes:** pair with a neighbor and continue the exercises together, and flag a facilitator so they can work on your setup in the background. Do not spend the session debugging alone.
 
-## Step 5 — Set up your evaluation worksheet
+## Step 6 — Set up your evaluation worksheet
 
 Throughout the workshop you will judge answers with three questions. Keep this table in a scratch file (or on paper):
 
