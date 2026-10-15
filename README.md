@@ -22,7 +22,7 @@ A working principle you will use all session: domain-model answers are strongest
 
 - A laptop with [VS Code](https://code.visualstudio.com/) and [Claude Code](https://claude.com/claude-code), or Claude Code in a terminal
 - Node.js 20.20.0 or newer and npm 10.8.2 or newer
-- Access credentials for the SAP Domain Models MCP server — two service binding files preinstalled on your workshop VM (see [Getting Started](exercises/ex0/))
+- Access credentials for the SAP Domain Models MCP server — two service binding files in this repository's `credentials/` directory; the IAS binding is added shortly before the session and revoked after it (see [Getting Started](exercises/ex0/))
 - No SAP system access is required; all exercises run against the domain models
 
 ## Exercises

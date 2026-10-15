@@ -33,9 +33,10 @@ $hasIasBinding = $PSBoundParameters.ContainsKey("IasBinding")
 if ($hasDomainBinding -xor $hasIasBinding) {
   throw "Provide both -SapDomainModelsBinding and -IasBinding, or omit both for interactive prompts."
 }
-# Preinstalled workshop binding files; pressing Enter at a prompt uses these.
-# Update $defaultBindingDir once the VM image location is finalized.
-$defaultBindingDir = "<VM_CREDS_DIR>"
+# Workshop binding files ship in the repository's credentials\ directory;
+# pressing Enter at a prompt uses these. Run the wizard from the repository
+# root so the defaults resolve.
+$defaultBindingDir = Join-Path (Get-Location).Path "credentials"
 $defaultDomainModelsBinding = Join-Path $defaultBindingDir "sap-domain-models-dev.json"
 $defaultIasBinding = Join-Path $defaultBindingDir "ias-dev.json"
 

@@ -18,9 +18,10 @@ usage() {
   echo "Usage: $0 [--force] [<sap-domain-models-dev.json> <ias-dev.json>]" >&2
 }
 
-# Preinstalled workshop binding files; pressing Enter at a prompt uses these.
-# Update default_binding_dir once the VM image location is finalized.
-default_binding_dir="<VM_CREDS_DIR>"
+# Workshop binding files ship in the repository's credentials/ directory;
+# pressing Enter at a prompt uses these. Run the wizard from the repository
+# root so the defaults resolve.
+default_binding_dir="$PWD/credentials"
 default_domain_models_binding="$default_binding_dir/sap-domain-models-dev.json"
 default_ias_binding="$default_binding_dir/ias-dev.json"
 

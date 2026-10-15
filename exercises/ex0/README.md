@@ -16,16 +16,14 @@ Each tool takes a natural-language question. Behind it, a reasoning model retrie
 
 ## Step 1 — Locate your credentials
 
-Your credentials are two service binding files **preinstalled on your workshop VM** — they are not in this repository:
+Your credentials are two service binding files in this repository's `credentials/` directory:
 
 | File | What it is |
 |---|---|
-| `sap-domain-models-dev.json` | Service binding that identifies the workshop environment |
-| `ias-dev.json` | IAS binding the token helper uses to mint short-lived access tokens |
+| `credentials/sap-domain-models-dev.json` | Service binding that identifies the workshop environment |
+| `credentials/ias-dev.json` | IAS binding the token helper uses to mint short-lived access tokens — **added shortly before the session** |
 
-> **TBD:** The exact VM location is finalized closer to the session — the setup wizard will offer it as a default, so you normally don't need to find the files yourself.
-
-These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the file contents into chat.
+These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the file contents into chat. If `ias-dev.json` is missing, pull the latest commit (`git pull`).
 
 ## Step 2 — Run the guided setup
 
@@ -43,17 +41,17 @@ So you know what's coming, the run has four interaction points:
 
 1. **Permission prompts** for a few read-only checks (Node.js version, locating the helper). Approve them.
 
-2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design:
+2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design. Run it from this repository's root directory so the defaults in the next step resolve:
 
 ```
 bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
 ```
 
-3. **Two file-path prompts** from the wizard, each showing the preinstalled file's location as a default in brackets. **Press Enter to accept the default**; type a path only if your files are somewhere else:
+3. **Two file-path prompts** from the wizard, each showing this repository's `credentials/` copy as a default in brackets (the defaults resolve when you run the wizard from the repository root). **Press Enter to accept the default**; type a path only if your files are somewhere else:
 
 ```
-Location of sap-domain-models-dev.json [<default path>]:
-Location of ias-dev.json [<default path>]:
+Location of sap-domain-models-dev.json [<repo>/credentials/sap-domain-models-dev.json]:
+Location of ias-dev.json [<repo>/credentials/ias-dev.json]:
 ```
 
 The wizard validates both files, detects the workshop environment from the service binding, and writes a protected credentials file. It prints exactly four non-secret result lines:

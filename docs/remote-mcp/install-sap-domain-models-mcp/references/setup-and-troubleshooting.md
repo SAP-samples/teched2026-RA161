@@ -30,8 +30,9 @@ two service bindings (or service keys) from the same subaccount:
 
 The downloaded file may contain the credential fields at the top level or under
 a top-level `credentials` object. The workshop files are named
-`sap-domain-models-dev.json` and `ias-dev.json`. The user provides only the two
-local file paths to the private wizard. Never ask them to paste either JSON document or any
+`sap-domain-models-dev.json` and `ias-dev.json` and ship in the workshop
+repository's `credentials/` directory. The user provides only the two local
+file paths to the private wizard. Never ask them to paste either JSON document or any
 binding value into chat, and never read either binding with agent file tools.
 The wizard maps the SAP Domain Models binding's exact service origin to the MCP
 configuration below:
@@ -206,8 +207,9 @@ bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
 ```
 
 The wizard asks for the locations of `sap-domain-models-dev.json` and
-`ias-dev.json`, offering the preinstalled default path for each; pressing Enter
-accepts the default and a typed path overrides it. It validates both files,
+`ias-dev.json`, offering the workshop repository's `credentials/` copies as
+defaults when run from the repository root; pressing Enter accepts the default
+and a typed path overrides it. It validates both files,
 detects the cluster from the SAP Domain Models `url`, extracts the IAS values
 without displaying them, and atomically writes a mode-600 credentials file. It
 prints exactly four non-secret results: detected environment, MCP endpoint, MCP
