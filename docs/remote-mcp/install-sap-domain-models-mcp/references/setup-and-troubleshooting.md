@@ -98,6 +98,19 @@ be PowerShell, run every PowerShell block in this skill through
 `powershell -NoProfile -Command "..."`, or save it to a file and run
 `powershell -NoProfile -ExecutionPolicy Bypass -File <path>`.
 
+From a POSIX agent shell on Windows, resolve Node.js in that shell first —
+PowerShell spawned from it may not see `node` on its own `PATH` and then
+reports that no supported Node.js was found:
+
+```sh
+node --version
+NODE_BIN="$(cygpath -m "$(command -v node)")"
+```
+
+`cygpath -m` converts the POSIX `/c/...` result to the `C:/...` form required
+in saved configuration. Use the PowerShell block below only from an actual
+PowerShell session, or when the POSIX shell cannot find `node`:
+
 On Windows PowerShell, prefer the active executable when it is compatible. If
 it is too old, search an existing nvm-windows installation before stopping:
 
@@ -233,10 +246,14 @@ interactive prompt mode from the agent. If the repository binding files are
 missing (`ias-prod-usea.json` means the decrypt step has not run; see above),
 or the user keeps their bindings elsewhere, ask the user to run the same
 command in their own terminal with their paths and to share the four result
-lines. If the wizard reports that the destination exists, obtain explicit user
-approval before rerunning it with `--force`. Use
-`assets/credentials.env.example` only when the user declines the wizard or it
-cannot run.
+lines. Before the run, test whether the target environment's credentials file
+already exists (for example
+`~/.config/sap-domain-models/mcp-prod-usea-credentials.env`); if it does, ask
+the user once whether to replace it and include `--force` from the start. A
+`Credentials file already exists` exit is that same approval gate, not a
+failure to debug: obtain explicit user approval, then rerun with `--force`.
+Use `assets/credentials.env.example` only when the user declines the wizard or
+it cannot run.
 
 On Windows, install the bundled PowerShell wizard and run it the same way,
 with both binding paths as parameters:
