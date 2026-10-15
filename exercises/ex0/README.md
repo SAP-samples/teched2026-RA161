@@ -19,8 +19,25 @@ Each tool takes a natural-language question. Behind it, a reasoning model retrie
 The workshop machines do not come with this repository, and you don't need a GitHub account or `git` to get it:
 
 1. Download the ZIP: <https://github.com/SAP-samples/teched2026-RA161/archive/refs/heads/main.zip> (or **Code → Download ZIP** on the repository page — no sign-in required).
-2. Extract it to a durable location such as your home folder or Desktop — not a temporary folder, and don't move or delete it after setup: the editor configuration you are about to create points at this folder by absolute path.
-3. Open a terminal in the extracted folder (`teched2026-RA161-main`). Every command in this exercise runs from there.
+2. Extract it into a `projects` directory under your home directory (create it if it doesn't exist). Don't move or delete the extracted folder after setup: the editor configuration you are about to create points at it by absolute path.
+
+   Windows (PowerShell):
+
+   ```powershell
+   New-Item -ItemType Directory -Force -Path "$HOME\projects" | Out-Null
+   Expand-Archive -LiteralPath "$HOME\Downloads\teched2026-RA161-main.zip" -DestinationPath "$HOME\projects"
+   cd "$HOME\projects\teched2026-RA161-main"
+   ```
+
+   macOS/Linux:
+
+   ```sh
+   mkdir -p ~/projects
+   unzip ~/Downloads/teched2026-RA161-main.zip -d ~/projects
+   cd ~/projects/teched2026-RA161-main
+   ```
+
+3. Stay in that terminal — you are now in the extracted folder (`~/projects/teched2026-RA161-main`), and every command in this exercise runs from there.
 
 ## Step 2 — Locate your credentials
 
@@ -57,10 +74,16 @@ So you know what's coming, the run has four interaction points:
 
 1. **Permission prompts** for a few read-only checks (Node.js version, locating the helper). Approve them.
 
-2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design. Run it from this repository's root directory so the defaults in the next step resolve:
+2. **The credentials wizard, in your own terminal.** The skill installs a small wizard script and pauses, asking you to run it yourself — secrets stay out of the chat by design. Run it from this repository's root directory so the defaults in the next step resolve. On macOS/Linux:
 
 ```
 bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
+```
+
+On Windows (PowerShell; the skill gives you the exact command):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$HOME\.config\sap-domain-models\sap-domain-models-set-credentials.ps1"
 ```
 
 3. **Two file-path prompts** from the wizard, each showing this repository's `credentials/` copy as a default in brackets (the defaults resolve when you run the wizard from the repository root). **Press Enter to accept the default**; type a path only if your files are somewhere else:
