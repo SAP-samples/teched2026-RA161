@@ -22,19 +22,31 @@ The workshop machines do not come with this repository, and you don't need a Git
 
 **2. Extract it into a `projects` directory under your home directory** (created if it doesn't exist). Don't move or delete the extracted folder after setup: the editor configuration you are about to create points at it by absolute path.
 
-Windows (PowerShell):
+Windows (PowerShell) — run the three commands in order:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME\projects" | Out-Null
+```
+
+```powershell
 Expand-Archive -LiteralPath "$HOME\Downloads\teched2026-RA161-main.zip" -DestinationPath "$HOME\projects"
+```
+
+```powershell
 cd "$HOME\projects\teched2026-RA161-main"
 ```
 
-macOS/Linux:
+macOS/Linux — run the three commands in order:
 
 ```sh
 mkdir -p ~/projects
+```
+
+```sh
 unzip ~/Downloads/teched2026-RA161-main.zip -d ~/projects
+```
+
+```sh
 cd ~/projects/teched2026-RA161-main
 ```
 
@@ -63,7 +75,13 @@ These are shared, session-scoped credentials minted for this workshop and revoke
 
 This repository ships an installation skill that does the entire setup for you: it checks your Node.js version, walks you through a private credentials wizard, configures Claude Code, and validates the connection end to end.
 
-Start Claude Code **in this repository's directory** and ask:
+In the terminal from Step 1 — you are already in this repository's directory — start Claude Code:
+
+```
+claude
+```
+
+Then ask:
 
 ```
 Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Domain Models MCP in this editor. Do not ask me to paste secrets.
