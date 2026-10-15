@@ -7,7 +7,7 @@ description: Configure, migrate, or repair prod DEWC or prod USEA SAP Domain Mod
 
 Use only the helper and setup resources shipped in this onboarding repository.
 Do not install or reference the private npm package. The service bindings
-(`sap-domain-models-dev.json` and `ias-dev.json`) select the environment; do
+(`sap-domain-models-prod-usea.json` and `ias-prod-usea.json`) select the environment; do
 not ask the user to choose or infer one from their location.
 
 Read and follow both setup references:

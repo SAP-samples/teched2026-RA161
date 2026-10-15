@@ -3,18 +3,18 @@
 Creates a private Remote MCP credentials file from SAP Domain Models and IAS service bindings.
 
 .PARAMETER SapDomainModelsBinding
-Path to the SAP Domain Models service binding JSON file (sap-domain-models-dev.json).
+Path to the SAP Domain Models service binding JSON file (sap-domain-models-prod-usea.json).
 
 .PARAMETER IasBinding
-Path to the IAS service binding JSON file (ias-dev.json).
+Path to the IAS service binding JSON file (ias-prod-usea.json).
 
 .PARAMETER Force
 Replace the environment-specific credentials file if it already exists.
 
 .EXAMPLE
 powershell -NoProfile -ExecutionPolicy Bypass -File .\sap-domain-models-set-credentials.ps1 `
-  -SapDomainModelsBinding C:\Downloads\sap-domain-models-dev.json `
-  -IasBinding C:\Downloads\ias-dev.json
+  -SapDomainModelsBinding C:\Downloads\sap-domain-models-prod-usea.json `
+  -IasBinding C:\Downloads\ias-prod-usea.json
 
 .NOTES
 Unblock a script downloaded from a browser with Unblock-File before running it.
@@ -37,18 +37,18 @@ if ($hasDomainBinding -xor $hasIasBinding) {
 # pressing Enter at a prompt uses these. Run the wizard from the repository
 # root so the defaults resolve.
 $defaultBindingDir = Join-Path (Get-Location).Path "credentials"
-$defaultDomainModelsBinding = Join-Path $defaultBindingDir "sap-domain-models-dev.json"
-$defaultIasBinding = Join-Path $defaultBindingDir "ias-dev.json"
+$defaultDomainModelsBinding = Join-Path $defaultBindingDir "sap-domain-models-prod-usea.json"
+$defaultIasBinding = Join-Path $defaultBindingDir "ias-prod-usea.json"
 
 if (-not $hasDomainBinding) {
   if ([Console]::IsInputRedirected) {
     throw "Provide both service binding file paths or run this script in an interactive terminal."
   }
-  $SapDomainModelsBinding = (Read-Host "Location of sap-domain-models-dev.json [$defaultDomainModelsBinding]").Trim()
+  $SapDomainModelsBinding = (Read-Host "Location of sap-domain-models-prod-usea.json [$defaultDomainModelsBinding]").Trim()
   if ([string]::IsNullOrWhiteSpace($SapDomainModelsBinding)) {
     $SapDomainModelsBinding = $defaultDomainModelsBinding
   }
-  $IasBinding = (Read-Host "Location of ias-dev.json [$defaultIasBinding]").Trim()
+  $IasBinding = (Read-Host "Location of ias-prod-usea.json [$defaultIasBinding]").Trim()
   if ([string]::IsNullOrWhiteSpace($IasBinding)) {
     $IasBinding = $defaultIasBinding
   }
