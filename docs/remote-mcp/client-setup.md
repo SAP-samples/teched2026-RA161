@@ -16,9 +16,9 @@ identify the application, not an individual user, so protect them as secrets.
    and stdio-style editor configurations use the public `mcp-remote` package
    through `npx`.
 2. A downloaded SAP Domain Models service binding JSON file
-   (`sap-domain-models-dev.json`). Its `url`
+   (`sap-domain-models-prod-usea.json`). Its `url`
    identifies the correct prod DEWC or prod USEA cluster.
-3. A downloaded `SECRET` IAS service binding JSON file (`ias-dev.json`) from
+3. A downloaded `SECRET` IAS service binding JSON file (`ias-prod-usea.json`) from
    the same BTP subaccount. It must contain credentials for an app with the
    `client_credentials` grant whose tokens carry the selected SAP Domain Models
    service's provider client ID in `aud`.

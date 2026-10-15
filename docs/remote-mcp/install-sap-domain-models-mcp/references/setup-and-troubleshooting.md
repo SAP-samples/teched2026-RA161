@@ -30,11 +30,11 @@ two service bindings (or service keys) from the same subaccount:
 
 The downloaded file may contain the credential fields at the top level or under
 a top-level `credentials` object. The workshop files are named
-`sap-domain-models-dev.json` and `ias-dev.json` and ship in the workshop
-repository's `credentials/` directory; `ias-dev.json` is produced there by
+`sap-domain-models-prod-usea.json` and `ias-prod-usea.json` and ship in the workshop
+repository's `credentials/` directory; `ias-prod-usea.json` is produced there by
 running `node scripts/decrypt-credentials.cjs` with the passphrase announced
 at the session. If it is missing, have the user run that script first. A
-Prod DEWC backup pair, `sap-domain-models-dewc.json` and `ias-dewc.json`
+Prod DEWC backup pair, `sap-domain-models-prod-dewc.json` and `ias-prod-dewc.json`
 (decrypted with `--fallback`), is used only when facilitators announce it. The
 user provides only the two local file paths to the private wizard. Never ask them to paste either JSON document or any
 binding value into chat, and never read either binding with agent file tools.
@@ -210,8 +210,8 @@ Ask the user to run this in their own interactive terminal:
 bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
 ```
 
-The wizard asks for the locations of `sap-domain-models-dev.json` and
-`ias-dev.json`, offering the workshop repository's `credentials/` copies as
+The wizard asks for the locations of `sap-domain-models-prod-usea.json` and
+`ias-prod-usea.json`, offering the workshop repository's `credentials/` copies as
 defaults when run from the repository root; pressing Enter accepts the default
 and a typed path overrides it. It validates both files,
 detects the cluster from the SAP Domain Models `url`, extracts the IAS values

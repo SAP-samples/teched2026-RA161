@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 // Decrypts the workshop IAS service binding shipped as
-// credentials/ias-dev.json.enc into credentials/ias-dev.json.
+// credentials/ias-prod-usea.json.enc into credentials/ias-prod-usea.json.
 //
 // Usage:
 //   node scripts/decrypt-credentials.cjs [--fallback]
 //     Prompts for the passphrase announced at the session and writes
-//     credentials/ias-dev.json (mode 600). Never prints binding values.
+//     credentials/ias-prod-usea.json (mode 600). Never prints binding values.
 //     --fallback works on the Prod DEWC pair instead:
-//     credentials/ias-dewc.json.enc -> credentials/ias-dewc.json.
+//     credentials/ias-prod-dewc.json.enc -> credentials/ias-prod-dewc.json.
 //
 //   node scripts/decrypt-credentials.cjs --encrypt [--fallback] <ias-binding.json>
 //     Facilitators: encrypts a downloaded IAS binding to
-//     credentials/ias-dev.json.enc (or ias-dewc.json.enc with --fallback).
+//     credentials/ias-prod-usea.json.enc (or ias-prod-dewc.json.enc with --fallback).
 //     Prompts for the passphrase twice.
 //
 // Format: AES-256-GCM, key derived with scrypt. The .enc file layout is
@@ -25,8 +25,8 @@ const path = require('node:path');
 
 const MAGIC = Buffer.from('RA161ENC', 'ascii');
 const REPO_ROOT = path.resolve(__dirname, '..');
-let encFile = path.join(REPO_ROOT, 'credentials', 'ias-dev.json.enc');
-let plainFile = path.join(REPO_ROOT, 'credentials', 'ias-dev.json');
+let encFile = path.join(REPO_ROOT, 'credentials', 'ias-prod-usea.json.enc');
+let plainFile = path.join(REPO_ROOT, 'credentials', 'ias-prod-usea.json');
 
 let pipedInput = null;
 function nextPipedLine() {
@@ -130,8 +130,8 @@ async function main() {
   const args = process.argv.slice(2);
   const usage = 'Usage: node scripts/decrypt-credentials.cjs [--encrypt <ias-binding.json>] [--fallback]';
   if (args.includes('--fallback')) {
-    encFile = path.join(REPO_ROOT, 'credentials', 'ias-dewc.json.enc');
-    plainFile = path.join(REPO_ROOT, 'credentials', 'ias-dewc.json');
+    encFile = path.join(REPO_ROOT, 'credentials', 'ias-prod-dewc.json.enc');
+    plainFile = path.join(REPO_ROOT, 'credentials', 'ias-prod-dewc.json');
   }
   const rest = args.filter((arg) => arg !== '--fallback');
   if (rest[0] === '--encrypt') {

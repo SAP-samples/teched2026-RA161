@@ -28,8 +28,8 @@ Your credentials are two service binding files in this repository's `credentials
 
 | File | What it is |
 |---|---|
-| `credentials/sap-domain-models-dev.json` | Service binding that identifies the workshop environment |
-| `credentials/ias-dev.json.enc` | **Encrypted** IAS binding the token helper uses to mint short-lived access tokens — added shortly before the session |
+| `credentials/sap-domain-models-prod-usea.json` | Service binding that identifies the workshop environment |
+| `credentials/ias-prod-usea.json.enc` | **Encrypted** IAS binding the token helper uses to mint short-lived access tokens — added shortly before the session |
 
 Decrypt the IAS binding with the passphrase shown on screen at the session:
 
@@ -37,7 +37,7 @@ Decrypt the IAS binding with the passphrase shown on screen at the session:
 node scripts/decrypt-credentials.cjs
 ```
 
-It prompts for the passphrase (your input is hidden) and writes `credentials/ias-dev.json`. If it reports that the encrypted file is missing, your ZIP predates the credential upload — download a fresh copy of the repository (Step 1) and start again from there.
+It prompts for the passphrase (your input is hidden) and writes `credentials/ias-prod-usea.json`. If it reports that the encrypted file is missing, your ZIP predates the credential upload — download a fresh copy of the repository (Step 1) and start again from there.
 
 These are shared, session-scoped credentials minted for this workshop and revoked right after it ends. Even so, practice normal credential hygiene: the setup only ever needs the file **paths** — never paste the decrypted file's contents into chat.
 
@@ -66,8 +66,8 @@ bash ~/.config/sap-domain-models/sap-domain-models-set-credentials.sh
 3. **Two file-path prompts** from the wizard, each showing this repository's `credentials/` copy as a default in brackets (the defaults resolve when you run the wizard from the repository root). **Press Enter to accept the default**; type a path only if your files are somewhere else:
 
 ```
-Location of sap-domain-models-dev.json [<repo>/credentials/sap-domain-models-dev.json]:
-Location of ias-dev.json [<repo>/credentials/ias-dev.json]:
+Location of sap-domain-models-prod-usea.json [<repo>/credentials/sap-domain-models-prod-usea.json]:
+Location of ias-prod-usea.json [<repo>/credentials/ias-prod-usea.json]:
 ```
 
 The wizard validates both files, detects the workshop environment from the service binding, and writes a protected credentials file. It prints exactly four non-secret result lines:
@@ -79,7 +79,7 @@ MCP server name: prod_usea_sap_domain_models_mcp
 Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env
 ```
 
-If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair. Decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), re-run the wizard answering the prompts with `credentials/sap-domain-models-dewc.json` and `credentials/ias-dewc.json` instead of the defaults, and paste the new four result lines — they say `Prod DEWC` — into Claude Code so it adds the fallback server.
+If the facilitators announce a fallback during the session, the repository already carries a Prod DEWC backup pair. Decrypt it with `node scripts/decrypt-credentials.cjs --fallback` (same or newly announced passphrase), re-run the wizard answering the prompts with `credentials/sap-domain-models-prod-dewc.json` and `credentials/ias-prod-dewc.json` instead of the defaults, and paste the new four result lines — they say `Prod DEWC` — into Claude Code so it adds the fallback server.
 
 If the wizard instead reports `Credentials file already exists`, you (or a previous attempt) already wrote one — re-run it with `--force` to replace it, and the last line reads `Replaced` instead of `Wrote`.
 

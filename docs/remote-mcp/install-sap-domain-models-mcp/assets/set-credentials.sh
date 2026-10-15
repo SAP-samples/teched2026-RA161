@@ -3,10 +3,10 @@
 #
 # Usage:
 #   bash sap-domain-models-set-credentials.sh [--force]
-#   bash sap-domain-models-set-credentials.sh [--force] <sap-domain-models-dev.json> <ias-dev.json>
+#   bash sap-domain-models-set-credentials.sh [--force] <sap-domain-models-prod-usea.json> <ias-prod-usea.json>
 #
 # Reads the target cluster from the SAP Domain Models service binding
-# (sap-domain-models-dev.json) and the
+# (sap-domain-models-prod-usea.json) and the
 # client_credentials values from the IAS service binding. It writes a chmod 600
 # per-environment credentials file under ~/.config/sap-domain-models/ without
 # printing any secret values. Existing credentials are replaced only with
@@ -15,15 +15,15 @@
 set -euo pipefail
 
 usage() {
-  echo "Usage: $0 [--force] [<sap-domain-models-dev.json> <ias-dev.json>]" >&2
+  echo "Usage: $0 [--force] [<sap-domain-models-prod-usea.json> <ias-prod-usea.json>]" >&2
 }
 
 # Workshop binding files ship in the repository's credentials/ directory;
 # pressing Enter at a prompt uses these. Run the wizard from the repository
 # root so the defaults resolve.
 default_binding_dir="$PWD/credentials"
-default_domain_models_binding="$default_binding_dir/sap-domain-models-dev.json"
-default_ias_binding="$default_binding_dir/ias-dev.json"
+default_domain_models_binding="$default_binding_dir/sap-domain-models-prod-usea.json"
+default_ias_binding="$default_binding_dir/ias-prod-usea.json"
 
 expand_user_path() {
   case "$1" in
@@ -46,13 +46,13 @@ case "$#" in
       usage
       exit 1
     fi
-    printf 'Location of sap-domain-models-dev.json [%s]: ' "$default_domain_models_binding"
+    printf 'Location of sap-domain-models-prod-usea.json [%s]: ' "$default_domain_models_binding"
     if ! IFS= read -r domain_models_binding; then
       echo "Error: SAP Domain Models service binding path is required." >&2
       exit 1
     fi
     domain_models_binding="${domain_models_binding:-$default_domain_models_binding}"
-    printf 'Location of ias-dev.json [%s]: ' "$default_ias_binding"
+    printf 'Location of ias-prod-usea.json [%s]: ' "$default_ias_binding"
     if ! IFS= read -r ias_binding; then
       echo "Error: IAS service binding path is required." >&2
       exit 1
