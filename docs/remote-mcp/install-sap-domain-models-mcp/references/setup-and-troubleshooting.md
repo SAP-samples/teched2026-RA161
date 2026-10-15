@@ -91,6 +91,26 @@ NODE_BIN_DIR="$(dirname "$NODE_BIN")"
 SERVER_PATH="$NODE_BIN_DIR:/usr/local/bin:/usr/bin:/bin"
 ```
 
+On Windows, the agent's command shell may be a POSIX shell rather than
+PowerShell (Claude Code runs commands through Git Bash), where a bare
+PowerShell block fails with `command not found`. Unless the shell is known to
+be PowerShell, run every PowerShell block in this skill through
+`powershell -NoProfile -Command "..."`, or save it to a file and run
+`powershell -NoProfile -ExecutionPolicy Bypass -File <path>`.
+
+From a POSIX agent shell on Windows, resolve Node.js in that shell first —
+PowerShell spawned from it may not see `node` on its own `PATH` and then
+reports that no supported Node.js was found:
+
+```sh
+node --version
+NODE_BIN="$(cygpath -m "$(command -v node)")"
+```
+
+`cygpath -m` converts the POSIX `/c/...` result to the `C:/...` form required
+in saved configuration. Use the PowerShell block below only from an actual
+PowerShell session, or when the POSIX shell cannot find `node`:
+
 On Windows PowerShell, prefer the active executable when it is compatible. If
 it is too old, search an existing nvm-windows installation before stopping:
 
@@ -152,7 +172,10 @@ still fail when a GUI client starts with a clean `PATH`.
    newly added server. For other editors, reload or reconnect the MCP server.
 7. Make a real read-only `s4` or `ariba` tool call through the named server. A
    token mint, connection panel, `tools/list`, or server list is diagnostic but
-   not end-to-end proof.
+   not end-to-end proof. Never attempt this call in the setup session itself or
+   via a subagent spawned from it: a newly added server is not visible to
+   either, so the call returns "No such tool available" even when the
+   configuration is correct. Validate only after the restart in step 6.
 
 ## Validate authentication safely
 
@@ -223,10 +246,14 @@ interactive prompt mode from the agent. If the repository binding files are
 missing (`ias-prod-usea.json` means the decrypt step has not run; see above),
 or the user keeps their bindings elsewhere, ask the user to run the same
 command in their own terminal with their paths and to share the four result
-lines. If the wizard reports that the destination exists, obtain explicit user
-approval before rerunning it with `--force`. Use
-`assets/credentials.env.example` only when the user declines the wizard or it
-cannot run.
+lines. Before the run, test whether the target environment's credentials file
+already exists (for example
+`~/.config/sap-domain-models/mcp-prod-usea-credentials.env`); if it does, ask
+the user once whether to replace it and include `--force` from the start. A
+`Credentials file already exists` exit is that same approval gate, not a
+failure to debug: obtain explicit user approval, then rerun with `--force`.
+Use `assets/credentials.env.example` only when the user declines the wizard or
+it cannot run.
 
 On Windows, install the bundled PowerShell wizard and run it the same way,
 with both binding paths as parameters:
@@ -318,6 +345,12 @@ file or individual tool arguments.
 
   Do not use `Set-ExecutionPolicy`.
 
+- **`Set-Acl` was found in module `Microsoft.PowerShell.Security` but the
+  module could not be loaded:** the installed wizard copy predates the
+  module-free ACL handling. Re-copy `assets/set-credentials.ps1` over
+  `~\.config\sap-domain-models\sap-domain-models-set-credentials.ps1`,
+  unblock it, and rerun — the current wizard applies ACLs through .NET and
+  needs no PowerShell module.
 - **The credentials destination already exists:** leave it unchanged unless the
   user explicitly requests replacement, then rerun with `--force` on
   macOS/Linux or `-Force` on Windows.
