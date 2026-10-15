@@ -89,11 +89,11 @@ Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Doma
 
 ### What the skill will do
 
-The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. Your part:
+The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. **There is nothing to copy or paste in this section** — it only describes what you will see. Your part:
 
-**1. Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines:
+**1. Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines. A successful run looks like this — it is output, not something to type:
 
-```
+```text
 Detected environment: Prod USEA
 MCP endpoint: https://sap-domain-models-mcp-prod-usea.appai.cloud.sap/mcp
 MCP server name: prod_usea_sap_domain_models_mcp
