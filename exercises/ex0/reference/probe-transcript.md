@@ -20,14 +20,12 @@ Note the package attribution (VA) — a data-dictionary fact, not prose about SA
 
 **Prompt**
 
-> Use the ariba tool: which API creates a supplier in Ariba SLP? One sentence.
+> Use the ariba tool: which endpoint retrieves a vendor's certificates in the Supplier Data API with Pagination? One sentence.
 
 **Response**
 
-> Based on the provided API descriptions, SupplierProfileImport (SOAP, operation
-> SupplierProfileImportOperation) is the only API whose name and operation imply
-> creating/importing a supplier; however, the description field is empty and does
-> not explicitly state this.
+> The `supplierdatapagination_v4` API exposes `GET /vendors/{vendorId}/certificates`
+> ("Fetch Certificate by SMVendorID") to retrieve a vendor's certificates.
 
-Note the evidence-bound honesty: the model names the specific API and operation,
-and says exactly what the retrieved evidence does not confirm.
+Note the structural attribution: a definite path, HTTP method, and API package —
+facts you can check against the API definition, not prose about what the API does.

@@ -51,7 +51,11 @@ file with one of the abbreviated examples below.
 On macOS and Linux, the guided workflow assigns the uppercase shell variables
 used below. On Windows, use `$mcpName`, `$endpoint`,
 `$credsFile`, `$nodeBin`, `$helperPath`, and `$serverPath` with equivalent
-values. Use forward-slash absolute paths in JSON.
+values. Use forward-slash absolute paths in JSON. On Windows the agent's shell
+may be a POSIX shell rather than PowerShell (Claude Code uses Git Bash), so
+unless the shell is known to be PowerShell, run each PowerShell block through
+`powershell -NoProfile -Command "..."` or save it and run it with
+`powershell -NoProfile -ExecutionPolicy Bypass -File <path>`.
 
 ## Temperature
 
@@ -97,13 +101,14 @@ if (Test-Path $headersWrapper) {
 }
 $wrapperLines = @(
   "@echo off"
-  ('set "SAP_DOMAIN_MODELS_MCP_CREDS_FILE={0}"' -f $credsFile)
+  "set `"SAP_DOMAIN_MODELS_MCP_CREDS_FILE=$credsFile`""
 )
 if ($temperature) {
-  $wrapperLines += ('set "SAP_DOMAIN_MODELS_TEMPERATURE={0}"' -f $temperature)
+  $wrapperLines += "set `"SAP_DOMAIN_MODELS_TEMPERATURE=$temperature`""
 }
-$wrapperLines += ('"{0}" "{1}" headers' -f $nodeBin, $helperPath)
+$wrapperLines += "`"$nodeBin`" `"$helperPath`" headers"
 $wrapperLines | Set-Content -Path $headersWrapper -Encoding ascii
+Get-Content $headersWrapper
 
 $headersHelper = '"' + $headersWrapper.Replace("\", "/") + '"'
 $config = @{
@@ -112,16 +117,31 @@ $config = @{
   headersHelper = $headersHelper
   alwaysLoad = $true
 } | ConvertTo-Json -Compress
-claude mcp add-json $mcpName $config
 ```
+
+Do not build the wrapper lines with the `-f` format operator: a mistyped
+placeholder (for example `{ 0}`) raises a `FormatError` that drops that line
+while the rest of the file is still written, leaving a wrapper that runs but
+prints nothing — `headersHelper` then gets an empty response and
+authentication fails. The wrapper contains paths, not secrets, so writing the
+file directly with the agent's file-write tool is equally good. Either way,
+verify the `Get-Content` output before testing authentication: the last line
+must be the quoted node/helper invocation (three non-empty lines in all, four
+with a temperature override).
+
+On Windows, `claude mcp add-json` reliably fails with
+`Invalid configuration: Invalid input` when the payload contains a
+`headersHelper` string. Do not iterate on it — go straight to the
+[direct-edit recovery](#windows-direct-edit-recovery) below using the values
+assembled above.
 
 If a resolved path contains `%` or `!`, move the onboarding checkout or Node.js
 to a simple path before saving a `cmd.exe` wrapper. Retain the `.cmd` extension.
 
 ### Windows direct-edit recovery
 
-If `claude mcp add-json` returns `Invalid configuration: Invalid input`, recover
-the same scope the user selected. Claude Code stores both user- and local-scope
+Write the entry by editing the configuration file directly, in the same scope
+the user selected. Claude Code stores both user- and local-scope
 MCP servers in `~/.claude.json`; it stores user-scope servers under the top-level
 `mcpServers` key and local-scope servers under a project in `projects`.
 
@@ -133,14 +153,8 @@ selected entry, parse the result, and preserve every unrelated property.
 #### Claude Code VS Code extension or user scope
 
 For a server that must appear in the Claude Code VS Code extension across
-projects, first try the explicit user scope:
-
-```powershell
-claude mcp add-json --scope user $mcpName $config
-```
-
-If the command rejects the `headersHelper` payload, merge the entry into the
-top-level `mcpServers` object in `~/.claude.json`:
+projects (user scope), merge the entry into the top-level `mcpServers` object
+in `~/.claude.json`:
 
 ```powershell
 $configPath = Join-Path $HOME ".claude.json"
@@ -180,7 +194,8 @@ exact selected key:
 
 ```powershell
 $configPath = Join-Path $HOME ".claude.json"
-& $nodeBin -e 'const fs=require("node:fs"); const data=JSON.parse(fs.readFileSync(process.argv[1],"utf8")); console.log(Object.keys(data.projects || {}).join("\n"))' $configPath
+$data = Get-Content $configPath -Raw | ConvertFrom-Json
+$data.projects.PSObject.Properties.Name
 ```
 
 Back up the file, then edit only the selected project and environment:
@@ -205,6 +220,10 @@ console.log(`Saved ${name} with headersHelper ${headersHelper}`);
 & $nodeBin -e $editScript $configPath $projectKey $mcpName $endpoint $headersHelper
 & $nodeBin -e 'const fs=require("node:fs"); JSON.parse(fs.readFileSync(process.argv[1],"utf8")); console.log("Claude configuration JSON is valid")' $configPath
 ```
+
+The `node -e` scripts take their first user argument at `process.argv[1]`. If
+you save one to a file and run it as `node <file>`, every index shifts by one
+(`argv[1]` becomes the script path) — adjust the destructuring or keep `-e`.
 
 Compare the selected entry and surrounding projects with the backup. If any
 unrelated content changed, restore it with
@@ -329,7 +348,10 @@ For Claude Code, first run `claude mcp get "$MCP_NAME"` and confirm the effectiv
 entry is direct HTTP with the selected endpoint and a working `headersHelper`;
 it must not be URL-only or contain a minted bearer token. Exit the current
 process and start a fresh session before making a real read-only `s4` or `ariba`
-call through the environment-specific server name. Do not use **Authenticate** or
+call through the environment-specific server name. Never attempt that call in
+the setup session or from a subagent spawned within it — a newly added server
+is not visible to either, and the call returns "No such tool available" even
+when the configuration is correct. Do not use **Authenticate** or
 `claude mcp login` to repair a `/register` error. For other editors, reload or
 reconnect the selected environment. A token mint, `tools/list`, `claude mcp
 list`, `/mcp` panel, or server list is diagnostic but not end-to-end proof. For

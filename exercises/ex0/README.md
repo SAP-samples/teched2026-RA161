@@ -22,19 +22,31 @@ The workshop machines do not come with this repository, and you don't need a Git
 
 **2. Extract it into a `projects` directory under your home directory** (created if it doesn't exist). Don't move or delete the extracted folder after setup: the editor configuration you are about to create points at it by absolute path.
 
-Windows (PowerShell):
+Windows (PowerShell) — run the three commands in order:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME\projects" | Out-Null
+```
+
+```powershell
 Expand-Archive -LiteralPath "$HOME\Downloads\teched2026-RA161-main.zip" -DestinationPath "$HOME\projects"
+```
+
+```powershell
 cd "$HOME\projects\teched2026-RA161-main"
 ```
 
-macOS/Linux:
+macOS/Linux — run the three commands in order:
 
 ```sh
 mkdir -p ~/projects
+```
+
+```sh
 unzip ~/Downloads/teched2026-RA161-main.zip -d ~/projects
+```
+
+```sh
 cd ~/projects/teched2026-RA161-main
 ```
 
@@ -63,7 +75,13 @@ These are shared, session-scoped credentials minted for this workshop and revoke
 
 This repository ships an installation skill that does the entire setup for you: it checks your Node.js version, walks you through a private credentials wizard, configures Claude Code, and validates the connection end to end.
 
-Start Claude Code **in this repository's directory** and ask:
+In the terminal from Step 1 — you are already in this repository's directory — start Claude Code:
+
+```
+claude
+```
+
+Then ask:
 
 ```
 Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Domain Models MCP in this editor. Do not ask me to paste secrets.
@@ -71,11 +89,11 @@ Use docs/remote-mcp/install-sap-domain-models-mcp/SKILL.md to configure SAP Doma
 
 ### What the skill will do
 
-The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. Your part:
+The run is mostly hands-off: Claude Code runs the checks and the credentials wizard itself, using the two files from Step 2 — the wizard's output contains no secrets. **There is nothing to copy or paste in this section** — it only describes what you will see. Your part:
 
-**1. Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines:
+**1. Approve the permission prompts**: a few read-only checks (Node.js version, locating the helper) and the wizard run against `credentials/sap-domain-models-prod-usea.json` and `credentials/ias-prod-usea.json`. The wizard detects the workshop environment from the service binding, writes a protected credentials file, and prints exactly four non-secret result lines. A successful run looks like this — it is output, not something to type:
 
-```
+```text
 Detected environment: Prod USEA
 MCP endpoint: https://sap-domain-models-mcp-prod-usea.appai.cloud.sap/mcp
 MCP server name: prod_usea_sap_domain_models_mcp
@@ -94,7 +112,7 @@ One caution for the whole run: if a browser window or an "Authenticate" prompt e
 
 ## Step 4 — Verify the connection
 
-**1. When the skill finishes, confirm in a terminal:**
+**1. When the skill finishes, confirm in a new terminal window:**
 
 ```
 claude mcp list
@@ -117,10 +135,10 @@ A grounded answer names the table's purpose **and its package** (VA). That packa
 Then verify the Ariba side:
 
 ```
-Use the ariba tool: which API creates a supplier in Ariba SLP? One sentence.
+Use the ariba tool: which endpoint retrieves a vendor's certificates in the Supplier Data API with Pagination? One sentence.
 ```
 
-Notice the answer's style: it names a specific API and operation, and if the evidence is thin it says so explicitly. That evidence-bound honesty is a feature you will rely on all session.
+A grounded answer names the endpoint path and HTTP method — `GET /vendors/{vendorId}/certificates` in the `supplierdatapagination_v4` API — not a paraphrase of what the API is for. The path and method are structural facts you can check against the API definition, the Ariba counterpart of the `VBAK`/package answer above.
 
 A transcript of both probe calls from a working session is in [reference/probe-transcript.md](reference/probe-transcript.md) — your wording will differ; the shape should match.
 

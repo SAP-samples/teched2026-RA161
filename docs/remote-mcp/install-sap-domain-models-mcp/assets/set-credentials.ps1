@@ -198,11 +198,24 @@ if (-not $IsWindows -and $PSVersionTable.PSEdition -eq "Core") {
   throw "This PowerShell wizard must run on Windows. Use set-credentials.sh on macOS or Linux."
 }
 
+function Set-OwnerOnlyAccessControl($info, $acl) {
+  # Set-Acl lives in Microsoft.PowerShell.Security, which fails to load when
+  # the wizard is spawned with a mangled PSModulePath (e.g. from a coding
+  # agent's shell). The .NET ACL APIs need no PowerShell module: Windows
+  # PowerShell has SetAccessControl on FileInfo/DirectoryInfo, PowerShell 7
+  # exposes it through FileSystemAclExtensions.
+  if ($info.GetType().GetMethod("SetAccessControl", [Type[]]@($acl.GetType()))) {
+    $info.SetAccessControl($acl)
+  } else {
+    [System.IO.FileSystemAclExtensions]::SetAccessControl($info, $acl)
+  }
+}
+
 $directory = Join-Path (Join-Path $HOME ".config") "sap-domain-models"
 [IO.Directory]::CreateDirectory($directory) | Out-Null
 $currentSid = [Security.Principal.WindowsIdentity]::GetCurrent().User
 try {
-  Set-Acl -LiteralPath $directory -AclObject (New-OwnerOnlyDirectoryAcl $currentSid)
+  Set-OwnerOnlyAccessControl ([IO.DirectoryInfo]::new($directory)) (New-OwnerOnlyDirectoryAcl $currentSid)
 } catch [System.Security.AccessControl.PrivilegeNotHeldException] {
   # SeSecurityPrivilege is not available to non-elevated processes on Windows.
   # The directory is already owned by the current user; skip owner-setting.
@@ -228,7 +241,7 @@ $content = @(
 
 try {
   [IO.File]::Open($temporary, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None).Dispose()
-  Set-Acl -LiteralPath $temporary -AclObject (New-OwnerOnlyFileAcl $currentSid)
+  Set-OwnerOnlyAccessControl ([IO.FileInfo]::new($temporary)) (New-OwnerOnlyFileAcl $currentSid)
   [IO.File]::WriteAllText($temporary, $content, [Text.UTF8Encoding]::new($false))
   Move-Item -LiteralPath $temporary -Destination $destination -Force
 } finally {
