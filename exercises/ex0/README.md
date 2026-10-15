@@ -48,7 +48,7 @@ Your credentials are two service binding files in this repository's `credentials
 | `credentials/sap-domain-models-prod-usea.json` | Service binding that identifies the workshop environment |
 | `credentials/ias-prod-usea.json.enc` | **Encrypted** IAS binding the token helper uses to mint short-lived access tokens — added shortly before the session |
 
-Decrypt the IAS binding with the passphrase shown on screen at the session:
+Decrypt the IAS binding with the passphrase shown on screen at the session — the command is the same in PowerShell and in a macOS/Linux shell, run from the extracted folder:
 
 ```
 node scripts/decrypt-credentials.cjs
@@ -78,8 +78,10 @@ The run is mostly hands-off: Claude Code runs the checks and the credentials wiz
 Detected environment: Prod USEA
 MCP endpoint: https://sap-domain-models-mcp-prod-usea.appai.cloud.sap/mcp
 MCP server name: prod_usea_sap_domain_models_mcp
-Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env
+Wrote C:\Users\<you>\.config\sap-domain-models\mcp-prod-usea-credentials.env
 ```
+
+(On macOS/Linux the last line reads `Wrote /Users/<you>/.config/sap-domain-models/mcp-prod-usea-credentials.env`.)
 
 2. **Confirm `--force` if asked.** If the wizard reports `Credentials file already exists`, a previous attempt already wrote one — the skill asks your approval to re-run with `--force`, and the last line then reads `Replaced` instead of `Wrote`.
 
