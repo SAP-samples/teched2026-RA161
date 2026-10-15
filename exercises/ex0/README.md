@@ -117,10 +117,10 @@ A grounded answer names the table's purpose **and its package** (VA). That packa
 Then verify the Ariba side:
 
 ```
-Use the ariba tool: which API creates a supplier in Ariba SLP? One sentence.
+Use the ariba tool: which endpoint retrieves a vendor's certificates in the Supplier Data API with Pagination? One sentence.
 ```
 
-Notice the answer's style: it names a specific API and operation, and if the evidence is thin it says so explicitly. That evidence-bound honesty is a feature you will rely on all session.
+A grounded answer names the endpoint path and HTTP method — `GET /vendors/{vendorId}/certificates` in the `supplierdatapagination_v4` API — not a paraphrase of what the API is for. The path and method are structural facts you can check against the API definition, the Ariba counterpart of the `VBAK`/package answer above.
 
 A transcript of both probe calls from a working session is in [reference/probe-transcript.md](reference/probe-transcript.md) — your wording will differ; the shape should match.
 
