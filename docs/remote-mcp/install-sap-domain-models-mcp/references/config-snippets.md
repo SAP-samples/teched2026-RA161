@@ -101,13 +101,14 @@ if (Test-Path $headersWrapper) {
 }
 $wrapperLines = @(
   "@echo off"
-  ('set "SAP_DOMAIN_MODELS_MCP_CREDS_FILE={0}"' -f $credsFile)
+  "set `"SAP_DOMAIN_MODELS_MCP_CREDS_FILE=$credsFile`""
 )
 if ($temperature) {
-  $wrapperLines += ('set "SAP_DOMAIN_MODELS_TEMPERATURE={0}"' -f $temperature)
+  $wrapperLines += "set `"SAP_DOMAIN_MODELS_TEMPERATURE=$temperature`""
 }
-$wrapperLines += ('"{0}" "{1}" headers' -f $nodeBin, $helperPath)
+$wrapperLines += "`"$nodeBin`" `"$helperPath`" headers"
 $wrapperLines | Set-Content -Path $headersWrapper -Encoding ascii
+Get-Content $headersWrapper
 
 $headersHelper = '"' + $headersWrapper.Replace("\", "/") + '"'
 $config = @{
@@ -117,6 +118,16 @@ $config = @{
   alwaysLoad = $true
 } | ConvertTo-Json -Compress
 ```
+
+Do not build the wrapper lines with the `-f` format operator: a mistyped
+placeholder (for example `{ 0}`) raises a `FormatError` that drops that line
+while the rest of the file is still written, leaving a wrapper that runs but
+prints nothing — `headersHelper` then gets an empty response and
+authentication fails. The wrapper contains paths, not secrets, so writing the
+file directly with the agent's file-write tool is equally good. Either way,
+verify the `Get-Content` output before testing authentication: the last line
+must be the quoted node/helper invocation (three non-empty lines in all, four
+with a temperature override).
 
 On Windows, `claude mcp add-json` reliably fails with
 `Invalid configuration: Invalid input` when the payload contains a
