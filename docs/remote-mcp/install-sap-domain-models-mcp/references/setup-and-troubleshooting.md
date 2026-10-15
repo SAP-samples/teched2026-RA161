@@ -318,6 +318,12 @@ file or individual tool arguments.
 
   Do not use `Set-ExecutionPolicy`.
 
+- **`Set-Acl` was found in module `Microsoft.PowerShell.Security` but the
+  module could not be loaded:** the installed wizard copy predates the
+  module-free ACL handling. Re-copy `assets/set-credentials.ps1` over
+  `~\.config\sap-domain-models\sap-domain-models-set-credentials.ps1`,
+  unblock it, and rerun — the current wizard applies ACLs through .NET and
+  needs no PowerShell module.
 - **The credentials destination already exists:** leave it unchanged unless the
   user explicitly requests replacement, then rerun with `--force` on
   macOS/Linux or `-Force` on Windows.
