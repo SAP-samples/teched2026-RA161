@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install SAP Domain Models MCP"
+  short_description: "Configure SAP Domain Models MCP"
+  default_prompt: "Use $install-sap-domain-models-mcp to configure SAP Domain Models MCP in this editor."
