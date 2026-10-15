@@ -32,7 +32,7 @@ The onboarding repository supplies both required components:
   [`install-sap-domain-models-mcp/`](./install-sap-domain-models-mcp/)
 - Helper: [`scripts/remote-mcp/helper.cjs`](../../scripts/remote-mcp/helper.cjs)
 
-Keep the checkout in a durable location because the saved editor configuration
+Keep the checkout (or extracted download) in a durable location because the saved editor configuration
 uses the helper's absolute path. The onboarding flow does not install or use a
 private SAP npm package. For stdio clients, the helper launches public
 `mcp-remote` through `npx`, so first use or a cache miss requires public npm
