@@ -144,19 +144,12 @@ A transcript of both probe calls from a working session is in [reference/probe-t
 
 > **If your connection cannot be fixed in a few minutes:** pair with a neighbor and continue the exercises together, and flag a facilitator so they can work on your setup in the background. Do not spend the session debugging alone.
 
-## Step 6 — Set up your evaluation worksheet
+## One rule of thumb before you start
 
-Throughout the workshop you will judge answers with three questions. Keep this table in a scratch file (or on paper):
-
-| Claim | Where it came from | Structurally verifiable? |
-|---|---|---|
-| e.g. "T030 key fields are KTOPL, KTOSL, BKLAS, BWMOD, KOMOK" | `s4` tool | Yes — data dictionary fact |
-| e.g. "VST is a sales-related transaction key" | `s4` tool | No — semantic gloss, verify before trusting |
-
-The rule of thumb you will test repeatedly: **structure is reliable, glosses are leads.** Object names, key fields, packages, endpoint paths, and pagination mechanics come from the ontology layer and hold up. One-line explanations of what something means, and exact credential strings like OAuth scopes, vary — treat them as pointers to confirm in the authoritative source.
+Throughout the workshop you will compare answers, and Claude Code will do the side-by-side analysis for you. Keep one rule in mind when you read its analysis: **structure is reliable, glosses are leads.** Object names, key fields, packages, endpoint paths, and pagination mechanics come from the ontology layer and hold up. One-line explanations of what something means, and exact credential strings like OAuth scopes, vary — treat them as pointers to confirm in the authoritative source.
 
 ## Summary
 
-You have a verified, grounded connection to the SAP Domain Models and a worksheet for judging what comes back.
+You have a verified, grounded connection to the SAP Domain Models and a rule of thumb for judging what comes back.
 
 Continue to - [Exercise 1 - Explore: GL Account Determination](../ex1/README.md)

@@ -34,7 +34,7 @@ A working principle you will use all session: domain-model answers are strongest
 - [Exercise 1 - Explore: GL Account Determination](exercises/ex1/)
     - [Exercise 1.1 - Ask without grounding](exercises/ex1#exercise-11-ask-without-grounding)
     - [Exercise 1.2 - Ask the S/4 domain model](exercises/ex1#exercise-12-ask-the-s4-domain-model)
-    - [Exercise 1.3 - Verify the structure](exercises/ex1#exercise-13-verify-the-structure)
+    - [Exercise 1.3 - Compare the answers with Claude](exercises/ex1#exercise-13-compare-the-answers-with-claude)
 - [Exercise 2 - Plan: A BTP Side-by-Side Extension](exercises/ex2/)
     - [Exercise 2.1 - Draft the plan with grounded facts](exercises/ex2#exercise-21-draft-the-plan-with-grounded-facts)
     - [Exercise 2.2 - Score the plan with the rubric](exercises/ex2#exercise-22-score-the-plan-with-the-rubric)
