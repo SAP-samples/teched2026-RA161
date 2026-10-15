@@ -50,8 +50,8 @@ automatically discover skills. The skill:
 1. Uses the SAP Domain Models service binding to detect the environment,
    endpoint, credentials path, and MCP server name.
 2. Validates Node.js and the repository helper.
-3. Guides you to provide only the two local binding-file paths to a private
-   Bash or PowerShell wizard.
+3. Runs a private Bash or PowerShell wizard against the repository's two
+   binding files (never reading or displaying their contents).
 4. Preserves unrelated MCP entries while configuring the selected editor.
 5. Validates authentication without displaying a token.
 6. Finishes with a real read-only `s4` or `ariba` call through the detected
