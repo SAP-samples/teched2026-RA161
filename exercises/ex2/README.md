@@ -22,11 +22,22 @@ Claude Code will call the `s4` tool (possibly more than once) and assemble the p
 
 ## Exercise 2.2 Score the plan with the rubric
 
-Now review your own plan the way a skeptical architect would. The rubric has one rule:
+Now have Claude review the plan the way a skeptical architect would. The rubric has one rule:
 
 > **Every named object must carry a verifiable identifier** — a package, a release state, an entity-set name from metadata, or a typed key field. A plan line that names an object without one is a guess wearing a suit.
 
-Check your plan for:
+Instead of checking the plan line by line yourself, ask Claude Code to apply the rubric:
+
+```
+Review the plan you just drafted against this rule: every named object must
+carry a verifiable identifier (a package, a release state, an entity-set name
+from metadata, or a typed key field). For each plan decision — service choice,
+entity coverage, filter design, authorization ask — list which claims are
+grounded in s4 tool evidence and which are not. Flag any claim with no
+identifier, and say plainly where the evidence was thin.
+```
+
+A grounded plan covers each decision like this:
 
 | Plan decision | Grounded when it includes |
 |---|---|
@@ -35,7 +46,7 @@ Check your plan for:
 | Filter design | Key fields with their EDM types and lengths |
 | Authorization ask | What the evidence actually establishes — and what it does not |
 
-That last row is the important one. The ontology layer's authorization trace for this service comes back **thin** — the access-control artifacts exist, but concrete authorization objects and activity values are not recorded in the evidence. A well-grounded answer *says so* and tells you what to do next (run a live authorization trace with STAUTHTRACE during a test call) instead of inventing object names. If your plan contains confident authorization specifics, check them extra hard: that is exactly where an ungrounded model would fabricate.
+That last row is the important one. The ontology layer's authorization trace for this service comes back **thin** — the access-control artifacts exist, but concrete authorization objects and activity values are not recorded in the evidence. A well-grounded answer *says so* and tells you what to do next (run a live authorization trace with STAUTHTRACE during a test call) instead of inventing object names. If the review passes confident authorization specifics as grounded, push back: that is exactly where an ungrounded model would fabricate, and Claude is reviewing with the same evidence that produced the plan.
 
 This is the second lesson of the workshop, and it may be the more important one: **a grounded system earns trust by how it handles what it doesn't know.** Your plan should hand the Basis team a verification procedure, not a guess.
 
