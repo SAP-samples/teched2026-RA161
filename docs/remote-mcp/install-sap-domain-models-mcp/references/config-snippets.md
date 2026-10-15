@@ -51,8 +51,9 @@ file with one of the abbreviated examples below.
 On macOS and Linux, the guided workflow assigns the uppercase shell variables
 used below. On Windows, use `$mcpName`, `$endpoint`,
 `$credsFile`, `$nodeBin`, `$helperPath`, and `$serverPath` with equivalent
-values. Use forward-slash absolute paths in JSON. The agent's shell on Windows
-is Git Bash, not PowerShell: run each PowerShell block through
+values. Use forward-slash absolute paths in JSON. On Windows the agent's shell
+may be a POSIX shell rather than PowerShell (Claude Code uses Git Bash), so
+unless the shell is known to be PowerShell, run each PowerShell block through
 `powershell -NoProfile -Command "..."` or save it and run it with
 `powershell -NoProfile -ExecutionPolicy Bypass -File <path>`.
 
