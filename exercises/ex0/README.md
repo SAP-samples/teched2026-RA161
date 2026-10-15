@@ -94,7 +94,7 @@ One caution for the whole run: if a browser window or an "Authenticate" prompt e
 
 ## Step 4 — Verify the connection
 
-**1. When the skill finishes, confirm in a terminal:**
+**1. When the skill finishes, confirm in a new terminal window:**
 
 ```
 claude mcp list
