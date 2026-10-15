@@ -91,6 +91,12 @@ NODE_BIN_DIR="$(dirname "$NODE_BIN")"
 SERVER_PATH="$NODE_BIN_DIR:/usr/local/bin:/usr/bin:/bin"
 ```
 
+On Windows, the agent's shell is Git Bash, not PowerShell, so a PowerShell
+block pasted directly fails with `command not found`. Run every PowerShell
+block in this skill through `powershell -NoProfile -Command "..."`, or save it
+to a file and run
+`powershell -NoProfile -ExecutionPolicy Bypass -File <path>`.
+
 On Windows PowerShell, prefer the active executable when it is compatible. If
 it is too old, search an existing nvm-windows installation before stopping:
 
@@ -152,7 +158,10 @@ still fail when a GUI client starts with a clean `PATH`.
    newly added server. For other editors, reload or reconnect the MCP server.
 7. Make a real read-only `s4` or `ariba` tool call through the named server. A
    token mint, connection panel, `tools/list`, or server list is diagnostic but
-   not end-to-end proof.
+   not end-to-end proof. Never attempt this call in the setup session itself or
+   via a subagent spawned from it: a newly added server is not visible to
+   either, so the call returns "No such tool available" even when the
+   configuration is correct. Validate only after the restart in step 6.
 
 ## Validate authentication safely
 
