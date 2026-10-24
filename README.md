@@ -43,6 +43,10 @@ A working principle you will use all session: domain-model answers are strongest
 
 - [Exercise 3 - Exploration Tracks](exercises/ex3/) — choose a track: Ariba integration plan-and-build, design-time deep dives, run-time process intelligence, or your own scenario
 
+**Presentation demo**
+
+- [Find the right credit limit](demos/credit-limit-read/) — a three-minute walkthrough of the tables and OData API for reading a credit account's current limit and currency, with a ready-to-use prompt, interactive HTML, and presenter notes. Use it as a standalone demo or an additional scenario for Exercise 3.
+
 ## How to obtain support
 
 Support for the content in this repository is available during the actual time of the online session for which this content has been designed. Otherwise, you may request support via the [Issues](../../issues) tab.
